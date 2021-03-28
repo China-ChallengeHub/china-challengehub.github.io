@@ -1,0 +1,8 @@
+[[main]]
+  name = "More"
+  identifier = "dropdown"
+[[main]]
+  parent = "dropdown"
+  name = "Github"
+  url = "https://github.com/China-ChallengeHub"
+  pre = '<i class="fab fa-fw fa-github"></i>'

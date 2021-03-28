@@ -1,0 +1,63 @@
+.navbar {
+  background-color: var(--hbs-navbar-bg);
+  color: #{$white-secondary};
+}
+
+.search-bar {
+  .form-control {
+    background-color: var(--hbs-background);
+    border-color: var(--hbs-background);
+    color: var(--hbs-secondary-text);
+    padding-left: 2rem;
+  
+    &:focus {
+      color: var(--hbs-primary-text);
+    }
+  }
+
+  .btn-search {
+    background-color: transparent;
+    color: var(--hbs-secondary-text);
+    z-index: 4!important;
+  }
+}
+
+.logo {
+  height: 26px;
+  margin-right: .5rem;
+}
+
+.navbar-toggler {
+  border: none;
+}
+
+.navbar-toggler:focus {
+  box-shadow: none;
+}
+
+.navbar-toggler-icon {
+  color: #{$white};
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path stroke='#ffffff' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>");
+}
+
+.navbar a {
+  &:hover,
+  &:active,
+  &.active {
+    color: #{$white};
+  }
+}
+
+.dropdown-item {
+  &:hover,
+  &:focus,
+  &:active,
+  &.active {
+    color: #fff;
+    background-color: var(--hbs-accent);
+  }
+}
+
+.nav-link:focus {
+  outline: none;
+}

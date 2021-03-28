@@ -1,0 +1,5 @@
+name = "ChallengeHub"
+#avatar = "images/profile.png" # Avatar image. Default to "images/profile.webp".
+bio = "Knowledge Sharing"
+company = "ChallengeHub"
+location = "China"

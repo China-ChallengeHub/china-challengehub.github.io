@@ -1,0 +1,33 @@
+baseURL = "https://challengehub.cn"
+title = "ChallengeHub"
+theme = "hugo-theme-bootstrap"
+copyright = "Copyright © 2020-2021 ChallengeHub. All Rights Reserved."
+
+# Multilingual mode
+defaultContentLanguage = "zh-cn"
+defaultContentLanguageInSubdir = false
+
+# Pagination
+paginate = 5
+# paginatePath = "page"
+
+# Disqus
+# disqusShortname = "yourdiscussshortname"
+
+# Google analytics
+# googleAnalytics = "UA-123-45"
+
+enableRobotsTXT = true
+
+enableEmoji = true
+
+[blackfriday]
+  hrefTargetBlank = true
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+[taxonomies]
+  category = "categories"
+  series = "series"
+  tag = "tags"

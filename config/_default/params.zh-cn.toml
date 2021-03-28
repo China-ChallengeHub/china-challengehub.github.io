@@ -1,0 +1,4 @@
+dateFormat = "2006-01-02"
+description = "一个致力于分享AI知识的社区"
+[archive]
+  dateFormat = "01-02"
