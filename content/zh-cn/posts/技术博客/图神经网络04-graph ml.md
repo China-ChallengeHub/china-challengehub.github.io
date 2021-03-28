@@ -1,6 +1,7 @@
 +++
 title = "图神经网络(04)-基于Graph的传统机器学习方法"
-date = "2021-03-24"
+date = "2021-03-29"
+publishDate = "2021-03-28"
 description = "图神经网络(04)-基于Graph的传统机器学习方法"
 featured = false
 categories = [
