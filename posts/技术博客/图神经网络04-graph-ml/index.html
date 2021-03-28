@@ -25,7 +25,9 @@
 <meta name="twitter:description" content="图神经网络(04)-基于Graph的传统机器学习方法"/>
 <meta name="twitter:site" content="@twitterusername"/>
 <meta data-name="palette" content="blue"><link rel=stylesheet href="/css/bundle.min.1b0b72c6b571b82af4480fe651d8082e9dbfa21efb95d22be211f1eb068600da.css" integrity="sha256-GwtyxrVxuCr0SA/mUdgILp2/oh77ldIr4hHx6waGANo=" crossorigin="anonymous"><script src="/js/bundle.min.e111a73d1d8074d5f778c52a31dbe5b47577eff2b773a96b7e56520928e9befd.js" integrity="sha256-4RGnPR2AdNX3eMUqMdvltHV37/K3c6lrflZSCSjpvv0=" crossorigin="anonymous"></script>
-</head>
+<link href="https://cdn.bootcss.com/highlight.js/10.0.1/styles/monokai.min.css" rel="stylesheet">
+<script src="https://cdn.bootcss.com/highlight.js/10.0.1/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script></head>
   <body><header><nav class="navbar fixed-top navbar-expand-xl">
   <div class="container">
     <a class="navbar-brand" href="/">
@@ -195,12 +197,10 @@
 （2）支持向量机
 （3）神经网络等</li>
 <li>应用模型
-给定一个新的节点、边、图，然后获取特征进行预测
-<img class="img-fluid" src="https://mmbiz.qpic.cn/mmbiz_png1FD1x61uYVcnGYBKicibDnDuA6vqMbRzCmOo5POd7WpbUkKHwlajg78qgmV0zhmD42UeHeTktTibHeDzWlt7rgS4A/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""  loading="lazy" />
-
-<img class="img-fluid" src="https://upload-images.jianshu.io/upload_images/1531909-4223b78ff1e08202.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""  loading="lazy" />
-</li>
+给定一个新的节点、边、图，然后获取特征进行预测</li>
 </ul>
+<p><img class="img-fluid" src="https://upload-images.jianshu.io/upload_images/1531909-4223b78ff1e08202.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""  loading="lazy" />
+</p>
 <p>我们总结下 基于Graph的机器学习相关概念和流程，首先明确下目标</p>
 <p>目标：对一些对象集合进行预测，比如是分类或者回归任务
 特征设计：</p>
@@ -370,21 +370,21 @@ Number of classes: 4
 例如，我们可以看到该数据集恰好有<strong>一个Graph</strong>，并且该数据集中的每个节点都被分配了** 34维特征向量**（唯一地描述了空手道俱乐部的成员）。
 此外，该图正好包含** 4个类别**，代表每个节点所属的社区。</p>
 <p>现在让我们更详细地看一下这个Graph：</p>
-<pre><code>data = dataset[0]  # 获取graph对象.
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">data <span style="color:#f92672">=</span> dataset[<span style="color:#ae81ff">0</span>]  <span style="color:#75715e"># 获取graph对象.</span>
 
-print(data)
-print('==============================================================')
+<span style="color:#66d9ef">print</span>(data)
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;==============================================================&#39;</span>)
 
-# 获取一些graph的统计信息.
-print(f'Number of nodes: {data.num_nodes}') # 节点的个数
-print(f'Number of edges: {data.num_edges}') # 边的个属于
-print(f'Average node degree: {data.num_edges / data.num_nodes:.2f}') # 节点的度平均数
-print(f'Number of training nodes: {data.train_mask.sum()}')
-print(f'Training node label rate: {int(data.train_mask.sum()) / data.num_nodes:.2f}')
-print(f'Contains isolated nodes: {data.contains_isolated_nodes()}')
-print(f'Contains self-loops: {data.contains_self_loops()}')
-print(f'Is undirected: {data.is_undirected()}')
-</code></pre><p>输出如下：</p>
+<span style="color:#75715e"># 获取一些graph的统计信息.</span>
+<span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#39;Number of nodes: {data.num_nodes}&#39;</span>) <span style="color:#75715e"># 节点的个数</span>
+<span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#39;Number of edges: {data.num_edges}&#39;</span>) <span style="color:#75715e"># 边的个属于</span>
+<span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#39;Average node degree: {data.num_edges / data.num_nodes:.2f}&#39;</span>) <span style="color:#75715e"># 节点的度平均数</span>
+<span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#39;Number of training nodes: {data.train_mask.sum()}&#39;</span>)
+<span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#39;Training node label rate: {int(data.train_mask.sum()) / data.num_nodes:.2f}&#39;</span>)
+<span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#39;Contains isolated nodes: {data.contains_isolated_nodes()}&#39;</span>)
+<span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#39;Contains self-loops: {data.contains_self_loops()}&#39;</span>)
+<span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#39;Is undirected: {data.is_undirected()}&#39;</span>)
+</code></pre></div><p>输出如下：</p>
 <pre><code>
 Data(edge_index=[2, 156], train_mask=[34], x=[34, 34], y=[34])
 ==============================================================
