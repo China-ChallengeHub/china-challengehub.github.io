@@ -9,21 +9,21 @@
     <copyright>Copyright © 2020-2021 ChallengeHub. All Rights Reserved.</copyright>
     <lastBuildDate>Sun, 28 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>图神经网络(04)-基于Graph的传统机器学习方法</title>
-      <link>/posts/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C04-graph-ml/</link>
-      <pubDate>Sun, 28 Mar 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/posts/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C04-graph-ml/</guid>
-      <description>1 图学习任务 我们简单回顾下，上一节我们介绍了，图的机器学习任务主要是以下三种： Node Level:节点级别 Link Level：边级别 Graph Level：图级别</description>
-    </item>
-    
-    <item>
       <title>图神经网络（03）-Node Embeddings</title>
       <link>/posts/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C03-node-embeddings/</link>
       <pubDate>Sun, 28 Mar 2021 00:00:00 +0000</pubDate>
       
       <guid>/posts/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C03-node-embeddings/</guid>
       <description>#我们回归下，如下图所示Graphs用来做传统机器学习任务的流程为：给定输入Graph,然后用来提取节点，边以及图级别的特征，之后学习模型（</description>
+    </item>
+    
+    <item>
+      <title>图神经网络(04)-基于Graph的传统机器学习方法</title>
+      <link>/posts/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C04-graph-ml/</link>
+      <pubDate>Wed, 24 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C04-graph-ml/</guid>
+      <description>1 图学习任务 我们简单回顾下，上一节我们介绍了，图的机器学习任务主要是以下三种： Node Level:节点级别 Link Level：边级别 Graph Level：图级别</description>
     </item>
     
   </channel>
