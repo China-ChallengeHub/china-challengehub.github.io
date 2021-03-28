@@ -1,17 +1,14 @@
 +++
-title = "图神经网络（04）-[彩蛋和实战] 基于Graph的传统机器学习方法"
+title = "图神经网络（03）-Node Embeddings1"
 date = "2021-03-28"
-publishDate = 2021-03-29
-description = "图神经网络（04）-[彩蛋和实战] 基于Graph的传统机器学习方法"
+description = "Embeddings1"
 featured = false
-draft = false
 categories = [
   "技术博客"
 ]
 tags = [
   "图神经网络"
 ]
-
 series = [
   "图神经网络"
 ]
