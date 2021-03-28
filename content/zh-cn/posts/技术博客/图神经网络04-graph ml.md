@@ -34,7 +34,7 @@ images = [
 （3）神经网络等
 - 应用模型
 给定一个新的节点、边、图，然后获取特征进行预测
-
+![](https://mmbiz.qpic.cn/mmbiz_png1FD1x61uYVcnGYBKicibDnDuA6vqMbRzCmOo5POd7WpbUkKHwlajg78qgmV0zhmD42UeHeTktTibHeDzWlt7rgS4A/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
 ![](https://upload-images.jianshu.io/upload_images/1531909-4223b78ff1e08202.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 我们总结下 基于Graph的机器学习相关概念和流程，首先明确下目标
