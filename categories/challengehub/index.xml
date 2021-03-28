@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ChallengeHub</title>
+    <link>/categories/challengehub/</link>
+    <description>Recent content on ChallengeHub</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright © 2020-2021 ChallengeHub. All Rights Reserved.</copyright>
+    <lastBuildDate>Sat, 27 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/challengehub/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ChallengeHub</title>
+      <link>/about/challengehub/</link>
+      <pubDate>Sat, 27 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/about/challengehub/</guid>
+      <description>ChallengeHub:A community dedicated to AI knowledge sharing 成员信息 致Great，毕业于中国人民大学，就职于某研究院，算法工程师； lrhao，就职于某互联网大厂数据分析； 不是吧阿sir，</description>
+    </item>
+    
+  </channel>
+</rss>

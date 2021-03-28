@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>分类 on ChallengeHub</title>
+    <link>/categories/</link>
+    <description>Recent content in 分类 on ChallengeHub</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright © 2020-2021 ChallengeHub. All Rights Reserved.</copyright>
+    <lastBuildDate>Sun, 28 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>技术博客</title>
+      <link>/categories/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/</link>
+      <pubDate>Sun, 28 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ChallengeHub</title>
+      <link>/categories/challengehub/</link>
+      <pubDate>Sat, 27 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/challengehub/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>招聘信息</title>
+      <link>/categories/%E6%8B%9B%E8%81%98%E4%BF%A1%E6%81%AF/</link>
+      <pubDate>Sat, 20 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/%E6%8B%9B%E8%81%98%E4%BF%A1%E6%81%AF/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>比赛推送</title>
+      <link>/categories/%E6%AF%94%E8%B5%9B%E6%8E%A8%E9%80%81/</link>
+      <pubDate>Sat, 20 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/%E6%AF%94%E8%B5%9B%E6%8E%A8%E9%80%81/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

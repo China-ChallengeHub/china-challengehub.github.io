@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>騰訊視訊 on ChallengeHub</title>
+    <link>/zh-tw/tags/%E9%A8%B0%E8%A8%8A%E8%A6%96%E8%A8%8A/</link>
+    <description>Recent content in 騰訊視訊 on ChallengeHub</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright © 2020-2021 ChallengeHub. All Rights Reserved.</copyright>
+    <lastBuildDate>Thu, 22 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="/zh-tw/tags/%E9%A8%B0%E8%A8%8A%E8%A6%96%E8%A8%8A/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>騰訊視訊 Shortcode</title>
+      <link>/zh-tw/posts/shortcodes/tencentvideo/</link>
+      <pubDate>Thu, 22 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/zh-tw/posts/shortcodes/tencentvideo/</guid>
+      <description>&lt;p&gt;關於騰訊視訊 shortcode 的詳細說明。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

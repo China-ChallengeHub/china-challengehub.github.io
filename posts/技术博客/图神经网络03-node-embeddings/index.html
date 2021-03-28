@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>图神经网络（03）-Node Embeddings - ChallengeHub</title><link rel="apple-touch-icon" href="/images/favicons/apple-touch-icon.png" sizes="180x180">
+<link rel="icon" href="/images/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/images/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+<link rel="manifest" href="/images/favicons/manifest.json">
+<link rel="icon" href="/images/favicons/favicon.ico">
+<meta name="description" content="关于 Alert Shortcode 的详细描述" /><meta itemprop="name" content="图神经网络（03）-Node Embeddings">
+<meta itemprop="description" content="关于 Alert Shortcode 的详细描述"><meta itemprop="datePublished" content="2021-03-28T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2021-03-28T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1969">
+<meta itemprop="keywords" content="图神经网络," /><meta property="og:title" content="图神经网络（03）-Node Embeddings" />
+<meta property="og:description" content="关于 Alert Shortcode 的详细描述" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C03-node-embeddings/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-03-28T00:00:00&#43;00:00" />
+<meta property="article:modified_time" content="2021-03-28T00:00:00&#43;00:00" /><meta property="og:site_name" content="ChallengeHub" />
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="图神经网络（03）-Node Embeddings"/>
+<meta name="twitter:description" content="关于 Alert Shortcode 的详细描述"/>
+<meta name="twitter:site" content="@twitterusername"/>
+<meta data-name="palette" content="blue"><link rel=stylesheet href="/css/bundle.min.1b0b72c6b571b82af4480fe651d8082e9dbfa21efb95d22be211f1eb068600da.css" integrity="sha256-GwtyxrVxuCr0SA/mUdgILp2/oh77ldIr4hHx6waGANo=" crossorigin="anonymous"><script src="/js/bundle.min.e111a73d1d8074d5f778c52a31dbe5b47577eff2b773a96b7e56520928e9befd.js" integrity="sha256-4RGnPR2AdNX3eMUqMdvltHV37/K3c6lrflZSCSjpvv0=" crossorigin="anonymous"></script>
+</head>
+  <body><header><nav class="navbar fixed-top navbar-expand-xl">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <img class="logo" alt="Logo" src="/images/logo.webp" loading="lazy">ChallengeHub</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-1 mb-2 mb-lg-0"><form class="search-bar d-flex ms-1" action="/search">
+  <div class="input-group input-group-sm">
+    <button class="btn btn-search disabled position-absolute left-0" type="submit"><i class="fas fa-fw fa-search"></i></button>
+    <input class="form-control rounded-pill" id="searchQuery" name="q" type="search" aria-label="Search">
+  </div>
+</form></ul><ul class="navbar-nav me-1 mb-2 mb-lg-0 me-1 ms-auto"><li class="nav-item">
+          <a class="nav-link" href="/archives">
+            <i class="fas fa-fw fa-file-archive"></i>归档
+          </a>
+        </li><li class="nav-item">
+          <a class="nav-link" href="/categories">
+            <i class="fas fa-fw fa-folder"></i>分类
+          </a>
+        </li><li class="nav-item">
+          <a class="nav-link" href="/tags">
+            <i class="fas fa-fw fa-tags"></i>标签
+          </a>
+        </li><li class="nav-item">
+          <a class="nav-link" href="/series">
+            <i class="fas fa-fw fa-columns"></i>专栏
+          </a>
+        </li><li class="nav-item">
+          <a class="nav-link" href="/about">
+            关于
+          </a>
+        </li><li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="navbarDropdown-dropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            更多
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown-dropdown"><li>
+              <a class="dropdown-item"
+                href="https://github.com/China-ChallengeHub" target="_blank">
+                <i class="fab fa-fw fa-github"></i>Github
+              </a>
+            </li></ul>
+        </li></ul>
+      <ul class="navbar-nav d-flex flex-row mb-2 mb-lg-0"><li class="nav-item me-1">
+  <a class="nav-link" tabindex="0" data-bs-trigger="click" id="languageSwitcher" data-bs-toggle="popover"
+    data-bs-placement="bottom" data-bs-target="#languagesPopoverBody" data-bs-html="true">
+    <i class="fas fa-fw fa-language" ></i>
+  </a>
+</li>
+<script type="text/html" id="languagesPopoverBody">
+  <ul class="languages list-group"><li class="language list-group-item"><a href="/en/">English</a></li><li class="language list-group-item"><a href="/zh-tw/">繁體中文</a></li><li class="language list-group-item active">简体中文</li></ul>
+</script>
+<li class="nav-item me-1">
+  <a class="nav-link" tabindex="0" data-bs-trigger="click" id="paletteSwitcher" data-bs-toggle="popover" data-bs-placement="bottom" 
+    data-bs-target="#palettesPopoverBody" data-bs-html="true">
+    <i class="fas fa-fw fa-palette" ></i>
+  </a>
+</li>
+<script type="text/html" id="palettesPopoverBody">
+  <ul class="palettes list-group"><li id="palette-blue" class="palette list-group-item bg-blue">
+      <a>蓝色</a>
+    </li><li id="palette-blue-gray" class="palette list-group-item bg-blue-gray">
+      <a>蓝灰色</a>
+    </li><li id="palette-brown" class="palette list-group-item bg-brown">
+      <a>棕色</a>
+    </li><li id="palette-cyan" class="palette list-group-item bg-cyan">
+      <a>青色</a>
+    </li><li id="palette-green" class="palette list-group-item bg-green">
+      <a>绿色</a>
+    </li><li id="palette-indigo" class="palette list-group-item bg-indigo">
+      <a>靛青色</a>
+    </li><li id="palette-orange" class="palette list-group-item bg-orange">
+      <a>橙色</a>
+    </li><li id="palette-pink" class="palette list-group-item bg-pink">
+      <a>粉色</a>
+    </li><li id="palette-purple" class="palette list-group-item bg-purple">
+      <a>紫色</a>
+    </li><li id="palette-red" class="palette list-group-item bg-red">
+      <a>红色</a>
+    </li><li id="palette-teal" class="palette list-group-item bg-teal">
+      <a>蓝绿色</a>
+    </li><li id="palette-yellow" class="palette list-group-item bg-yellow">
+      <a>黄色</a>
+    </li></ul>
+</script>
+
+<li class="nav-item me-1">
+  <a class="nav-link" tabindex="0" data-bs-trigger="click" id="fontSizeSwitcher" data-bs-toggle="popover" data-bs-placement="bottom" 
+    data-bs-target="#fontSizesPopoverBody" data-bs-html="true">
+    <i class="fas fa-fw fa-font" ></i>
+  </a>
+</li>
+<script type="text/html" id="fontSizesPopoverBody">
+  <form class="font-size-switcher-form">
+    <label for="fontSize" class="form-label">字体大小</label>
+    <input type="range" class="form-range" min="-2" max="2" id="fontSize">
+  </form>
+</script>
+<form class="mode-switcher-form d-flex align-items-center">
+  <div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" id="modeSwitcher">
+  </div>
+</form>
+</ul>
+    </div>
+  </div>
+</nav>
+</header>
+<main role="main" class="container">
+      <div class="row content">
+<div class="col-md-8">
+  <div class="container"><nav class="row" aria-label="breadcrumb">
+  <ol class="breadcrumb surface"><li class="breadcrumb-item"><a href="/">主页</a></li><li class="breadcrumb-item"><a href="/posts/">文章</a></li><li class="breadcrumb-item"><a href="/posts/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/">比赛推送</a></li><li class="breadcrumb-item active">图神经网络（03）-Node Embeddings</li></ol>
+</nav><article class="post row surface">
+  <h1 class="post-title my-3">图神经网络（03）-Node Embeddings</h1><div class="post-meta mb-3">
+  <span class="post-date me-2">
+    <i class="fas fa-fw fa-calendar-alt"></i>2021-03-28
+  </span>
+  <span class="poost-reading-time me-2">
+    <i class="fas fa-fw fa-coffee"></i>4 分钟阅读
+  </span>
+<a href="/categories/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/" class="post-taxonomy">#技术博客</a><a href="/series/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" class="post-taxonomy">#图神经网络</a><a href="/tags/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" class="post-taxonomy">#图神经网络</a></div>
+<div class="accordion accordion-flush surface post-toc position-sticky" id="accordionTOC">
+  <div class="accordion-item">
+    <div class="accordion-header" id="headingTOC" data-bs-toggle="collapse" data-bs-target="#collapseTOC" aria-expanded="true" aria-controls="collapseTOC">
+      <i class="fas fa-fw fa-bars"></i>目录
+    </div>
+    <div id="collapseTOC" class="accordion-collapse collapse" aria-labelledby="headingTOC" data-parent="#accordionTOC">
+      <div class="accordion-body mt-2">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-引言">1 引言</a></li>
+    <li><a href="#2-节点嵌入编码和解码">2 节点嵌入：编码和解码</a>
+      <ul>
+        <li><a href="#21-构建输入-图">2.1 构建输入-图</a></li>
+        <li><a href="#22-学习目标-node-embedding">2.2 学习目标-Node Embedding</a></li>
+        <li><a href="#23-学习方法-encoder和decoder">2.3 学习方法-Encoder和Decoder</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-random-walk">3 Random Walk</a>
+      <ul>
+        <li><a href="#31-符号">3.1 符号</a></li>
+        <li><a href="#32-random-walk-定义">3.2 Random Walk 定义</a></li>
+        <li><a href="#33-random-walk如何得到node-embeddings">3.3 Random Walk如何得到Node Embeddings</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+      </div>
+    </div>
+  </div>
+</div><div class="post-content mb-3"><p>#我们回归下，如下图所示Graphs用来做传统机器学习任务的流程为：给定输入Graph,然后用来提取节点，边以及图级别的特征，之后学习模型（比如SVM,NN等等），最后将特征映射为标签。
+<img class="img-fluid" src="https://upload-images.jianshu.io/upload_images/1531909-5467fe93f900ea81.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""  loading="lazy" />
+</p>
+<h2 id="1-引言">1 引言</h2>
+<p>图表示学习可以减轻特征工程的需求，表示学习可以自动学习Graph的特征，用于下游任务，熟悉NLP的同学比较清楚，传统文本特征构建依赖于统计手段来实现，冗余且效果有限，在词向量Word2Vec和预训练模型Bert等出现之后，文本表示变得更为便利且效果强大，自此万物皆可Embedding。</p>
+<p><img class="img-fluid" src="https://upload-images.jianshu.io/upload_images/1531909-fa757f92ac92b88d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""  loading="lazy" />
+</p>
+<p>图的表示学习的目的就是获得独立于不同任务的高效特征，通俗点讲就是能够针对不同任务学习得到适合任务的嵌入表示。
+<img class="img-fluid" src="https://upload-images.jianshu.io/upload_images/1531909-b08ec38e84c17c13.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""  loading="lazy" />
+</p>
+<p>Node Embedding的目的就是能够将节点映射到不同的embedding空间：</p>
+<ul>
+<li>节点间的embedding的相似性可以表示了节点间在网络的相似性：<strong>如果两个节点之间存在边，那么两个节点越相似</strong></li>
+<li>节点的Embedding能够编码网络信息</li>
+<li>可以用于下游任务，比如节点分类，边的预测，图的分类等
+<img class="img-fluid" src="https://upload-images.jianshu.io/upload_images/1531909-2f0fa197e3681746.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""  loading="lazy" />
+
+下面是一个Zachary&rsquo;s Karate Club Network的2维节点Embedding展示：
+<img class="img-fluid" src="https://upload-images.jianshu.io/upload_images/1531909-73f025e2771ffe23.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""  loading="lazy" />
+</li>
+</ul>
+<h2 id="2-节点嵌入编码和解码">2 节点嵌入：编码和解码</h2>
+<p>这一节我们主要掌握下如何学习节点的嵌入向量</p>
+<h3 id="21-构建输入-图">2.1 构建输入-图</h3>
+<p>首先，假设我们有一个图$G$：</p>
+<ul>
+<li>$V$代表节点的集合</li>
+<li>$A$ 代表链接矩阵
+为了方便起见，我们默认认为节点没有其他的额外特征，如下图所示：
+<img class="img-fluid" src="https://upload-images.jianshu.io/upload_images/1531909-cdbd8c34f5b5d15a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""  loading="lazy" />
+</li>
+</ul>
+<h3 id="22-学习目标-node-embedding">2.2 学习目标-Node Embedding</h3>
+<p>我们的目标是能够学习到节点的嵌入表示，这种节点嵌入的相似性能够近似节点在图中的相似性。
+<img class="img-fluid" src="https://upload-images.jianshu.io/upload_images/1531909-95dbf6f9cdcb925f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""  loading="lazy" />
+</p>
+<p>图中$ENC(u)$代表对节点$u$进行编码表示得到$z_{u}$,同样$ENC(v)$代表对节点$u$进行编码表示得到$z_{v}$</p>
+<h3 id="23-学习方法-encoder和decoder">2.3 学习方法-Encoder和Decoder</h3>
+<ol>
+<li>**<code>Encoder</code>**能够将节点映射成向量</li>
+<li>定义一个节点相似性函数(比如节点在原始图中的相似性评估方法)</li>
+<li>Decoder <code>DEC</code>能够将节点向量映射成相似性分数</li>
+<li>优化编码器的参数：
+原始网络的相似性：$similarity(u,v)$  $\approx$  节点嵌入的相似性 ： $z_{v}^Tz_{u}$</li>
+</ol>
+<p>其中有两个非常关键因素：编码和相似性函数。编码器能够学习到节点的向量，相似性函数能够提供我们优化的目标，如果两个节点在图中存在边或者距离越近，那么它们对应的节点向量在向量空间中相似性也会越大。
+<img class="img-fluid" src="https://upload-images.jianshu.io/upload_images/1531909-d0c40659b5c62f3e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""  loading="lazy" />
+</p>
+<p>如何选择定义节点相似性的方法是关键的地方，我们考虑下什么情况下，两个节点的相似性比较高？</p>
+<ul>
+<li>是否存在边或者连接</li>
+<li>是否共享邻居节点</li>
+<li>是否包括相似的属性特征
+接下来我们通过随机游走（Random Walks）来学习节点相似性，以及优化节点的嵌入向量。</li>
+</ul>
+<h2 id="3-random-walk">3 Random Walk</h2>
+<p>Node Embeddings的计算方法之一就是Random Walk，为了方面起见我们定义和引出下面的符号，以便统一解释。</p>
+<h3 id="31-符号">3.1 符号</h3>
+<p>为了方面接下来的公式推导，我们统一下符号标记：</p>
+<ul>
+<li>向量 $z_{u}$:
+<blockquote>
+<p>u节点的嵌入向量</p>
+</blockquote>
+</li>
+<li>概率$P(v|z_{u})$：
+<blockquote>
+<p>从节点$u$出发通过随机游走访问节点$v$的概率</p>
+</blockquote>
+</li>
+<li>Softmax函数：通过softmax函数一作用，一个K维向量就映射成为(0,1)的值，而这些值的累和为1（满足概率的性质），那么我们就可以将它理解成概率，在最后选取输出结点的时候，我们就可以选取概率最大（也就是值对应最大的）结点，作为我们的预测目标。
+$\sigma(z)<em>{i}=\frac{e^{Z</em>{i}}}{\sum_{j=1}^Ke^{Z_{j}}}$</li>
+<li>Sigmoid函数：
+$S(x)=\frac{1}{1+e^{-x}}$将一个数映射到（0,1）的区间</li>
+</ul>
+<h3 id="32-random-walk-定义">3.2 Random Walk 定义</h3>
+<p>给定一个Graph和一个起始点，我们选择随机选择该点的邻居节点，并且移动到该邻居节点；然后我们根据当前节点随机选择一个邻居节点，然后移动到该邻居节点，重复上述步骤&hellip;通过这种随机游走访问Graph节点的方式可以产生随机序列。下图描述了一个随机游走的实例，第一步从起始节点出发移动到节点5，第二步从节点5移动节点8，第三步从节点8移动节点9，第四步又从节点9移动到节点8，之后第5步移动到节点11，这样访问路径构成一个序列：</p>
+<pre><code>start_node-&gt;5-&gt;8-&gt;9-&gt;8-&gt;11
+</code></pre><p><img class="img-fluid" src="https://upload-images.jianshu.io/upload_images/1531909-5704af770d20a98c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""  loading="lazy" />
+</p>
+<h3 id="33-random-walk如何得到node-embeddings">3.3 Random Walk如何得到Node Embeddings</h3>
+<p>相信大家对下面的公式不会感到陌生，一般我们衡量两个向量的相似性时可以通过两个向量点积计算得到，相似地两个节点同时出现在同一随机游走序列的概率可以用如下表示：
+<img class="img-fluid" src="https://upload-images.jianshu.io/upload_images/1531909-1b9b91feebbd22b4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""  loading="lazy" />
+
+所以我们通过Rankdom Walk得到Node Embedding可以通过两个步骤：
+(1) 通过某种随机游走策略$R$（下文将会介绍）得到从节点$u$出发访问到节点$v$的路径，然后可以估计出节点$u$和$v$同时出现的概率
+(2) 优化节点的embeddings表示，使得节点的嵌入表示能够表达或者近似我们上述随机游走得到的统计
+回想一下我们机器学习或者深度学习的各种任务，无非就是在优化一个目标，一个近似目标，我们可以笼统地将我们输入表示成X，然后通过方法f来近似y。说到这里上面两个步骤特别像NLP中Glove向量的优化步骤，首先我们统计两个词在语料中共现概率，然后通过词向量来近似共现概率。</p>
+<p><img class="img-fluid" src="https://upload-images.jianshu.io/upload_images/1531909-2af48cdb61b11d9d.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""  loading="lazy" />
+</p>
+</div><div class="post-copyright mb-4">
+  <h3>版权</h3><div class="post-cc">本作品采用 <a target="_blank" rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh">CC BY-NC-ND 4.0 <i class="fab fa-fw fa-creative-commons"></i><i class="fab fa-fw fa-creative-commons-by"></i><i class="fab fa-fw fa-creative-commons-nc"></i><i class="fab fa-fw fa-creative-commons-nd"></i></a> 授权。</div>
+</div><div class="post-reward mb-4 text-center">
+  <button type="button" class="btn btn-reward" data-toggle="modal" data-target="#rewardModal">
+    <i class="fas fa-fw fa-medal"></i>打赏
+  </button>
+</div><div class="modal fade" id="rewardModal" tabindex="-1" aria-labelledby="rewardModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content surface">
+      <div class="modal-header">
+        <h5 class="modal-title" id="rewardModalLabel"><i class="fas fa-fw fa-medal"></i>打赏</h5>
+        <a href="#" data-dismiss="modal" aria-label="Close"><i class="fas fa-fw fa-times"></i></a>
+      </div>
+      <div class="modal-body">
+        <ul class="nav nav-tabs mb-3" role="tablist"><li class="nav-item" role="presentation">
+            <a class="nav-link active" id="reward-alipay-tab" data-toggle="tab" href="#reward-alipay" role="tab" aria-controls="reward-alipay" aria-selected="true">
+              <i class="fab fa-fw fa-alipay"></i>支付宝
+            </a>
+          </li><li class="nav-item" role="presentation">
+            <a class="nav-link" id="reward-wechat-tab" data-toggle="tab" href="#reward-wechat" role="tab" aria-controls="reward-wechat" aria-selected="true">
+              <i class="fab fa-fw fa-weixin"></i>微信
+            </a>
+          </li></ul>
+        <div class="tab-content" id="rewardTabContent"><div class="tab-pane fade post-reward-content show active" id="reward-alipay" role="tabpanel" aria-labelledby="reward-alipay-tab">
+            <img class="img-fluid post-reward-img" src="/images/reward/alipay.webp" loading="lazy" />
+          </div><div class="tab-pane fade post-reward-content show" id="reward-wechat" role="tabpanel" aria-labelledby="reward-wechat-tab">
+            <img class="img-fluid post-reward-img" src="/images/reward/wechat.webp" loading="lazy" />
+          </div></div>
+      </div>
+    </div>
+  </div>
+</div><div class="post-navs d-flex mb-3 justify-content-between">
+  <div class="post-nav w-50"><div class="prev-post">
+      <a href="/about/challengehub/">ChallengeHub</a>
+    </div></div>
+  <div class="post-nav flex-row-reverse"></div>
+</div></article><div class="post-comments surface row"><script src="https://utteranc.es/client.js"
+  repo="razonyang/hugo-theme-bootstrap"
+  issue-term="pathname"
+  label=""
+  theme="github-dark"
+  crossorigin="anonymous"
+  async>
+</script></div></div>
+</div><aside class="col-lg-4 sidebar d-flex">
+  <div class="container"><section class="profile surface row">
+  <div class="col-xl-6 d-flex align-items-center justify-content-center">
+    <img class="profile-avatar img-fluid" src="/images/profile.webp" alt="ChallengeHub" loading="lazy">
+  </div>
+  <div class="col-xl-6">
+    <h5 class="profile-name my-2">ChallengeHub</h5><div class="profile-bio mb-2">Knowledge Sharing</div><div class="profile-company mb-2"><i class="fas fa-fw fa-building"></i>ChallengeHub</div><div class="profile-location mb-2"><i class="fas fa-fw fa-map-marker-alt"></i>China</div><div class="profile-about mb-2"><i class="fas fa-fw fa-info-circle"></i><a href="/about/">关于</a></div></div>
+</section><section class="recent-posts row surface">
+  <h4>最近文章</h4>
+  <ul><li><a href="/posts/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C03-node-embeddings/">图神经网络（03）-Node Embeddings</a></li><li><a href="/posts/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/scikit-learn/">Scikit-Learn</a></li><li><a href="/posts/%E6%AF%94%E8%B5%9B%E6%8E%A8%E9%80%81/kaggle%E9%A1%B6%E7%BA%A7%E8%B5%9B%E4%BA%8B%E7%AD%89%E4%BD%A0%E6%9D%A5%E6%8E%92%E4%BD%8D/">【比赛推送】KDD 2021/ Kaggle 顶级赛事等你来排位</a></li><li><a href="/posts/%E6%8B%9B%E8%81%98%E4%BF%A1%E6%81%AF/kaggle%E9%A1%B6%E7%BA%A7%E8%B5%9B%E4%BA%8B%E7%AD%89%E4%BD%A0%E6%9D%A5%E6%8E%92%E4%BD%8D/">【阿里，字节，Moka】招聘信息汇总（ML、CV、NLP）</a></li></ul>
+</section>
+<section class="taxonomy-categories row surface">
+  <h4>
+    <a href="/categories">分类</a>
+  </h4>
+  <div><a href="/categories/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="技术博客">
+      技术博客 <span class="badge rounded-pill">2</span>
+    </a><a href="/categories/challengehub/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="ChallengeHub">
+      ChallengeHub <span class="badge rounded-pill">1</span>
+    </a><a href="/categories/%E6%8B%9B%E8%81%98%E4%BF%A1%E6%81%AF/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="招聘信息">
+      招聘信息 <span class="badge rounded-pill">1</span>
+    </a><a href="/categories/%E6%AF%94%E8%B5%9B%E6%8E%A8%E9%80%81/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="比赛推送">
+      比赛推送 <span class="badge rounded-pill">1</span>
+    </a></div>
+</section><section class="taxonomy-series row surface">
+  <h4>
+    <a href="/series">专栏</a>
+  </h4>
+  <div><a href="/series/scikit-learn%E7%B3%BB%E5%88%97%E6%95%99%E7%A8%8B/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="Scikit-Learn系列教程">
+      Scikit-Learn系列教程 <span class="badge rounded-pill">1</span>
+    </a><a href="/series/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="图神经网络">
+      图神经网络 <span class="badge rounded-pill">1</span>
+    </a><a href="/series/%E6%8B%9B%E8%81%98%E4%BF%A1%E6%81%AF/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="招聘信息">
+      招聘信息 <span class="badge rounded-pill">1</span>
+    </a><a href="/series/%E6%AF%94%E8%B5%9B%E6%8E%A8%E9%80%81/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="比赛推送">
+      比赛推送 <span class="badge rounded-pill">1</span>
+    </a></div>
+</section><section class="taxonomy-tags row surface">
+  <h4>
+    <a href="/tags">标签</a>
+  </h4>
+  <div><a href="/tags/challengehub/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="ChallengeHub">
+      ChallengeHub <span class="badge rounded-pill">1</span>
+    </a><a href="/tags/scikit-learn/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="scikit-learn">
+      scikit-learn <span class="badge rounded-pill">1</span>
+    </a><a href="/tags/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="图神经网络">
+      图神经网络 <span class="badge rounded-pill">1</span>
+    </a><a href="/tags/%E6%8B%9B%E8%81%98%E4%BF%A1%E6%81%AF/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="招聘信息">
+      招聘信息 <span class="badge rounded-pill">1</span>
+    </a><a href="/tags/%E6%AF%94%E8%B5%9B%E6%8E%A8%E9%80%81/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="比赛推送">
+      比赛推送 <span class="badge rounded-pill">1</span>
+    </a></div>
+</section></div>
+</aside>
+</div>
+    </main><footer class="footer mt-auto py-3 text-center container"><nav class="social-links nav my-2 justify-content-center"><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://bitbucket.org/bitbucketworkspaceid" title="Bitbucket">
+        <i class="fab fa-fw fa-2x fa-bitbucket"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://hub.docker.com/u/dockerhubusername" title="Dockerhub">
+        <i class="fab fa-fw fa-2x fa-docker"></i>
+      </a>
+    </li><li class="nav-item">
+    <a class="nav-link social-link" href="mailto:challengehub@126.com" title="Email">
+      <i class="fas fa-fw fa-2x fa-envelope"></i>
+    </a>
+  </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://facebook.com/facebookusername" title="Facebook">
+        <i class="fab fa-fw fa-2x fa-facebook"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://github.com/China-ChallengeHub" title="Github">
+        <i class="fab fa-fw fa-2x fa-github"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://gitlab.com/gitlabusername" title="Gitlab">
+        <i class="fab fa-fw fa-2x fa-gitlab"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://www.instagram.com/instagramusername" title="Instagram">
+        <i class="fab fa-fw fa-2x fa-instagram"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://linkedin.com/linkedinusername" title="Linkedin">
+        <i class="fab fa-fw fa-2x fa-linkedin"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=qqnumber&amp;site=qq&amp;menu=yes" title="Qq">
+        <i class="fab fa-fw fa-2x fa-qq"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://www.quora.com/profile/quorausername" title="Quora">
+        <i class="fab fa-fw fa-2x fa-quora"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://www.reddit.com/user/redditusername" title="Reddit">
+        <i class="fab fa-fw fa-2x fa-reddit"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://stackoverflow.com/users/stackoverflowuserid" title="Stackoverflow">
+        <i class="fab fa-fw fa-2x fa-stack-overflow"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://t.me/telegramusername" title="Telegram">
+        <i class="fab fa-fw fa-2x fa-telegram"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://tumblrusername.tumblr.com" title="Tumblr">
+        <i class="fab fa-fw fa-2x fa-tumblr"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://twitter.com/twitterusername" title="Twitter">
+        <i class="fab fa-fw fa-2x fa-twitter"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://weibo.com/weibousername" title="Weibo">
+        <i class="fab fa-fw fa-2x fa-weibo"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://www.zhihu.com/people/zhihuusername" title="Zhihu">
+        <i class="fab fa-fw fa-2x fa-zhihu"></i>
+      </a>
+    </li></nav>
+<div class="copyright mb-2">
+  Copyright © 2020-2021 ChallengeHub. All Rights Reserved.
+</div>
+</footer>
+<a id="btnScrollToTop" class="btn-scroll-to-top">
+  <i class="fas fa-fw fa-chevron-circle-up fa-2x"></i>
+</a>
+</body>
+</html>

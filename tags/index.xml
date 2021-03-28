@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>标签 on ChallengeHub</title>
+    <link>/tags/</link>
+    <description>Recent content in 标签 on ChallengeHub</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright © 2020-2021 ChallengeHub. All Rights Reserved.</copyright>
+    <lastBuildDate>Sun, 28 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>图神经网络</title>
+      <link>/tags/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</link>
+      <pubDate>Sun, 28 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ChallengeHub</title>
+      <link>/tags/challengehub/</link>
+      <pubDate>Sat, 27 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/challengehub/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>scikit-learn</title>
+      <link>/tags/scikit-learn/</link>
+      <pubDate>Sat, 27 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/scikit-learn/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>招聘信息</title>
+      <link>/tags/%E6%8B%9B%E8%81%98%E4%BF%A1%E6%81%AF/</link>
+      <pubDate>Sat, 20 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/%E6%8B%9B%E8%81%98%E4%BF%A1%E6%81%AF/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>比赛推送</title>
+      <link>/tags/%E6%AF%94%E8%B5%9B%E6%8E%A8%E9%80%81/</link>
+      <pubDate>Sat, 20 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/%E6%AF%94%E8%B5%9B%E6%8E%A8%E9%80%81/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
