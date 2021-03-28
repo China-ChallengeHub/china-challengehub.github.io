@@ -29,5 +29,5 @@ jobs:
           personal_token: ${{ secrets.challengehub }} # 这里的 ACTIONS_DEPLOY_KEY 则是上面设置 Private Key的变量名
           PUBLISH_BRANCH: gh-pages
           PUBLISH_DIR: ./public
-          cname: www.challengehub.cn
+          cname: challengehub.cn
           commit_message: ${{ github.event.head_commit.message }}
