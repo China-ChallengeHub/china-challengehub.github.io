@@ -1,14 +1,17 @@
 +++
-title = "图神经网络（03）-Node Embeddings1"
-date = "2021-03-28"
-description = "Embeddings1"
+title = "图神经网络（04）-基于Graph的传统机器学习方法"
+date = "2021-03-29"
+publishDate = 2021-03-29
+description = "图神经网络（04）-基于Graph的传统机器学习方法"
 featured = false
+draft = false
 categories = [
   "技术博客"
 ]
 tags = [
   "图神经网络"
 ]
+
 series = [
   "图神经网络"
 ]
