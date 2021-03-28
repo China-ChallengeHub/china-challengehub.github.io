@@ -4,6 +4,7 @@ date = "2021-03-29"
 publishDate = 2021-03-29
 description = "图神经网络（04）-[彩蛋和实战] 基于Graph的传统机器学习方法"
 featured = false
+draft = false
 categories = [
   "技术博客"
 ]
