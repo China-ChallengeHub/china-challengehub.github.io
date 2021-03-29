@@ -1,8 +1,10 @@
 {{- if and (default true .Site.Params.comment) (default true .Params.comment) -}}
 {{- partial "hooks/comments-begin" . -}}
 <div class="post-comments surface row">
-{{- partial "post/comments/disqus.html" . -}}
-{{- partial "post/comments/utterances" . -}}
+<!-- {{- partial "post/comments/disqus.html" . -}} -->
+<!-- {{- partial "post/comments/utterances" . -}} -->
+{{- partial "post/comments/valine.html" . -}}
+
 </div>
 {{- partial "hooks/comments-end" . -}}
 {{- end -}}

@@ -1,3 +1,15 @@
 baseURL = "http://example.org/"
 languageCode = "en-us"
 title = "My New Hugo Site"
+
+# comment
+[params.valine]
+    enable = true
+    appId = '0Bgqyowk34ENDhe3Ms5yaSQA-gzGzoHsz'
+    appKey = 'Wqucv0lMgWX8UOEU6hAAwlUO'
+    notify = false  # mail notifier , https://github.com/xCss/Valine/wiki
+    verify = false # Verification code
+    avatar = 'mm' 
+    placeholder = '说点什么吧...'
+    visitor = true
+
