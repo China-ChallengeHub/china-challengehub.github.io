@@ -1,0 +1,1291 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>基于LSTM的美国大选的新闻真假分类【NLP 新年开胃菜】 - ChallengeHub</title><link rel="apple-touch-icon" href="/images/favicons/apple-touch-icon.png" sizes="180x180">
+<link rel="icon" href="/images/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/images/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+<link rel="manifest" href="/images/favicons/manifest.json">
+<link rel="icon" href="/images/favicons/favicon.ico">
+<meta name="description" content="基于LSTM的美国大选的新闻真假分类【NLP 新年开胃菜】" /><meta itemprop="name" content="基于LSTM的美国大选的新闻真假分类【NLP 新年开胃菜】">
+<meta itemprop="description" content="基于LSTM的美国大选的新闻真假分类【NLP 新年开胃菜】"><meta itemprop="datePublished" content="2021-03-29T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2021-03-29T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="6406">
+<meta itemprop="keywords" content="深度学习课程," /><meta property="og:title" content="基于LSTM的美国大选的新闻真假分类【NLP 新年开胃菜】" />
+<meta property="og:description" content="基于LSTM的美国大选的新闻真假分类【NLP 新年开胃菜】" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/%E5%9F%BA%E4%BA%8Elstm%E7%9A%84%E7%BE%8E%E5%9B%BD%E5%A4%A7%E9%80%89%E7%9A%84%E6%96%B0%E9%97%BB%E7%9C%9F%E5%81%87%E5%88%86%E7%B1%BB/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-03-29T00:00:00&#43;00:00" />
+<meta property="article:modified_time" content="2021-03-29T00:00:00&#43;00:00" /><meta property="og:site_name" content="ChallengeHub" />
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="基于LSTM的美国大选的新闻真假分类【NLP 新年开胃菜】"/>
+<meta name="twitter:description" content="基于LSTM的美国大选的新闻真假分类【NLP 新年开胃菜】"/>
+<meta name="twitter:site" content="@twitterusername"/>
+<meta data-name="palette" content="blue"><link rel=stylesheet href="/css/bundle.min.1b0b72c6b571b82af4480fe651d8082e9dbfa21efb95d22be211f1eb068600da.css" integrity="sha256-GwtyxrVxuCr0SA/mUdgILp2/oh77ldIr4hHx6waGANo=" crossorigin="anonymous"><script src="/js/bundle.min.e111a73d1d8074d5f778c52a31dbe5b47577eff2b773a96b7e56520928e9befd.js" integrity="sha256-4RGnPR2AdNX3eMUqMdvltHV37/K3c6lrflZSCSjpvv0=" crossorigin="anonymous"></script>
+<link href="https://cdn.bootcss.com/highlight.js/10.0.1/styles/monokai.min.css" rel="stylesheet">
+<script src="https://cdn.bootcss.com/highlight.js/10.0.1/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script></head>
+  <body><header><nav class="navbar fixed-top navbar-expand-xl">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <img class="logo" alt="Logo" src="/images/logo.webp" loading="lazy">ChallengeHub</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-1 mb-2 mb-lg-0"><form class="search-bar d-flex ms-1" action="/search">
+  <div class="input-group input-group-sm">
+    <button class="btn btn-search disabled position-absolute left-0" type="submit"><i class="fas fa-fw fa-search"></i></button>
+    <input class="form-control rounded-pill" id="searchQuery" name="q" type="search" aria-label="Search">
+  </div>
+</form></ul><ul class="navbar-nav me-1 mb-2 mb-lg-0 me-1 ms-auto"><li class="nav-item">
+          <a class="nav-link" href="/archives">
+            <i class="fas fa-fw fa-file-archive"></i>归档
+          </a>
+        </li><li class="nav-item">
+          <a class="nav-link" href="/categories">
+            <i class="fas fa-fw fa-folder"></i>分类
+          </a>
+        </li><li class="nav-item">
+          <a class="nav-link" href="/tags">
+            <i class="fas fa-fw fa-tags"></i>标签
+          </a>
+        </li><li class="nav-item">
+          <a class="nav-link" href="/series">
+            <i class="fas fa-fw fa-columns"></i>专栏
+          </a>
+        </li><li class="nav-item">
+          <a class="nav-link" href="/about">
+            关于
+          </a>
+        </li><li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="navbarDropdown-dropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            更多
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown-dropdown"><li>
+              <a class="dropdown-item"
+                href="https://github.com/China-ChallengeHub" target="_blank">
+                <i class="fab fa-fw fa-github"></i>Github
+              </a>
+            </li></ul>
+        </li></ul>
+      <ul class="navbar-nav d-flex flex-row mb-2 mb-lg-0"><li class="nav-item me-1">
+  <a class="nav-link" tabindex="0" data-bs-trigger="click" id="languageSwitcher" data-bs-toggle="popover"
+    data-bs-placement="bottom" data-bs-target="#languagesPopoverBody" data-bs-html="true">
+    <i class="fas fa-fw fa-language" ></i>
+  </a>
+</li>
+<script type="text/html" id="languagesPopoverBody">
+  <ul class="languages list-group"><li class="language list-group-item"><a href="/en/">English</a></li><li class="language list-group-item"><a href="/zh-tw/">繁體中文</a></li><li class="language list-group-item active">简体中文</li></ul>
+</script>
+<li class="nav-item me-1">
+  <a class="nav-link" tabindex="0" data-bs-trigger="click" id="paletteSwitcher" data-bs-toggle="popover" data-bs-placement="bottom" 
+    data-bs-target="#palettesPopoverBody" data-bs-html="true">
+    <i class="fas fa-fw fa-palette" ></i>
+  </a>
+</li>
+<script type="text/html" id="palettesPopoverBody">
+  <ul class="palettes list-group"><li id="palette-blue" class="palette list-group-item bg-blue">
+      <a>蓝色</a>
+    </li><li id="palette-blue-gray" class="palette list-group-item bg-blue-gray">
+      <a>蓝灰色</a>
+    </li><li id="palette-brown" class="palette list-group-item bg-brown">
+      <a>棕色</a>
+    </li><li id="palette-cyan" class="palette list-group-item bg-cyan">
+      <a>青色</a>
+    </li><li id="palette-green" class="palette list-group-item bg-green">
+      <a>绿色</a>
+    </li><li id="palette-indigo" class="palette list-group-item bg-indigo">
+      <a>靛青色</a>
+    </li><li id="palette-orange" class="palette list-group-item bg-orange">
+      <a>橙色</a>
+    </li><li id="palette-pink" class="palette list-group-item bg-pink">
+      <a>粉色</a>
+    </li><li id="palette-purple" class="palette list-group-item bg-purple">
+      <a>紫色</a>
+    </li><li id="palette-red" class="palette list-group-item bg-red">
+      <a>红色</a>
+    </li><li id="palette-teal" class="palette list-group-item bg-teal">
+      <a>蓝绿色</a>
+    </li><li id="palette-yellow" class="palette list-group-item bg-yellow">
+      <a>黄色</a>
+    </li></ul>
+</script>
+
+<li class="nav-item me-1">
+  <a class="nav-link" tabindex="0" data-bs-trigger="click" id="fontSizeSwitcher" data-bs-toggle="popover" data-bs-placement="bottom" 
+    data-bs-target="#fontSizesPopoverBody" data-bs-html="true">
+    <i class="fas fa-fw fa-font" ></i>
+  </a>
+</li>
+<script type="text/html" id="fontSizesPopoverBody">
+  <form class="font-size-switcher-form">
+    <label for="fontSize" class="form-label">字体大小</label>
+    <input type="range" class="form-range" min="-2" max="2" id="fontSize">
+  </form>
+</script>
+<form class="mode-switcher-form d-flex align-items-center">
+  <div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" id="modeSwitcher">
+  </div>
+</form>
+</ul>
+    </div>
+  </div>
+</nav>
+</header>
+<main role="main" class="container">
+      <div class="row content">
+<div class="col-md-8">
+  <div class="container"><nav class="row" aria-label="breadcrumb">
+  <ol class="breadcrumb surface"><li class="breadcrumb-item"><a href="/">主页</a></li><li class="breadcrumb-item"><a href="/posts/">文章</a></li><li class="breadcrumb-item"><a href="/posts/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/">比赛推送</a></li><li class="breadcrumb-item active">基于LSTM的美国大选的新闻真假分类【NLP 新年开胃菜】</li></ol>
+</nav><article class="post row surface">
+  <h1 class="post-title my-3">基于LSTM的美国大选的新闻真假分类【NLP 新年开胃菜】</h1><div class="post-meta mb-3">
+  <span class="post-date me-2">
+    <i class="fas fa-fw fa-calendar-alt"></i>2021-03-29
+  </span>
+  <span class="poost-reading-time me-2">
+    <i class="fas fa-fw fa-coffee"></i>13 分钟阅读
+  </span>
+<a href="/categories/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/" class="post-taxonomy">#技术博客</a><a href="/series/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AF%BE%E7%A8%8B/" class="post-taxonomy">#深度学习课程</a><a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AF%BE%E7%A8%8B/" class="post-taxonomy">#深度学习课程</a></div>
+<div class="accordion accordion-flush surface post-toc position-sticky" id="accordionTOC">
+  <div class="accordion-item">
+    <div class="accordion-header" id="headingTOC" data-bs-toggle="collapse" data-bs-target="#collapseTOC" aria-expanded="true" aria-controls="collapseTOC">
+      <i class="fas fa-fw fa-bars"></i>目录
+    </div>
+    <div id="collapseTOC" class="accordion-collapse collapse" aria-labelledby="headingTOC" data-parent="#accordionTOC">
+      <div class="accordion-body mt-2">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#简介">简介</a></li>
+    <li><a href="#问题描述">问题描述</a></li>
+    <li><a href="#目标">目标</a></li>
+    <li><a href="#导入相关库">导入相关库</a></li>
+    <li><a href="#加载数据">加载数据</a></li>
+    <li><a href="#数据集的详情">数据集的详情</a></li>
+    <li><a href="#数据预处理与文本清洗">数据预处理与文本清洗</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#文本处理">文本处理</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#新闻的事件演变和可视化">新闻的事件演变和可视化</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#n-gram分析">N-gram分析</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#虚假和真实新闻词云">虚假和真实新闻词云</a></li>
+    <li><a href="#时间序列分析-虚假真实新闻">时间序列分析-虚假/真实新闻</a></li>
+    <li><a href="#stemming--vectorizing">Stemming &amp; Vectorizing</a></li>
+    <li><a href="#tfidfterm-frequency--inverse-document-frequency">TFIDF(Term Frequency — Inverse Document Frequency)</a></li>
+    <li><a href="#模型构建logistics-regression-假新闻分类器">模型构建：Logistics Regression 假新闻分类器</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#深度学习模型-lstm">深度学习模型-LSTM</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#bidirectional-lstm">Bidirectional LSTM</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#结论">结论</a></li>
+  </ul>
+</nav>
+      </div>
+    </div>
+  </div>
+</div><div class="post-content mb-3"><h2 id="简介">简介</h2>
+<p>新闻媒体已成为向世界人民传递世界上正在发生的事情的信息的渠道。 人们通常认为新闻中传达的一切都是真实的。 在某些情况下，甚至新闻频道也承认他们的新闻不如他们写的那样真实。 但是，一些新闻不仅对人民或政府产生重大影响，而且对经济也产生重大影响。 一则新闻可以根据人们的情绪和政治局势上下移动曲线。</p>
+<p>从真实的真实新闻中识别虚假新闻非常重要。 该问题已通过自然语言处理工具解决并得到了解决，本篇文章可帮助我们根据历史数据识别假新闻或真实新闻。</p>
+<h2 id="问题描述">问题描述</h2>
+<p>对于印刷媒体和数字媒体，信息的真实性已成为影响企业和社会的长期问题。在社交网络上，信息传播的范围和影响以如此快的速度发生，并且如此迅速地放大，以至于失真，不准确或虚假的信息具有巨大的潜力，可在数分钟内对数百万用户造成现实世界的影响。最近，人们表达了对该问题的一些担忧，并提出了一些缓解该问题的方法。</p>
+<p>在各种信息广播的整个历史中，一直存在着不那么精确的引人注目和引人入胜的新闻标题，这些新闻标题旨在吸引观众的注意力来出售信息。但是，在社交网站上，信息传播的范围和影响得到了显着放大，并且发展速度如此之快，以至于失真，不准确或虚假的信息具有巨大的潜力，可在数分钟内为数百万的用户带来真正的影响。</p>
+<h2 id="目标">目标</h2>
+<ul>
+<li>我们唯一的目标是将数据集中的新闻分类为假新闻或真实新闻。</li>
+<li>新闻的细致EDA</li>
+<li>选择并建立强大的分类模型</li>
+</ul>
+<h2 id="导入相关库">导入相关库</h2>
+<p>让我们导入所有必要的库以进行文本分析，并且将对数据集进行清洗。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 基本数据包：pandas和numpy</span>
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd 
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np 
+<span style="color:#75715e"># 可视化包</span>
+<span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#f92672">as</span> plt 
+<span style="color:#f92672">from</span> matplotlib <span style="color:#f92672">import</span> rcParams
+<span style="color:#f92672">import</span> seaborn <span style="color:#f92672">as</span> sns
+<span style="color:#f92672">from</span> textblob <span style="color:#f92672">import</span> TextBlob
+<span style="color:#f92672">from</span> plotly <span style="color:#f92672">import</span> tools
+<span style="color:#f92672">import</span> plotly.graph_objs <span style="color:#f92672">as</span> go
+<span style="color:#f92672">from</span> plotly.offline <span style="color:#f92672">import</span> iplot
+<span style="color:#f92672">%</span>matplotlib inline
+plt<span style="color:#f92672">.</span>rcParams[<span style="color:#e6db74">&#39;figure.figsize&#39;</span>] <span style="color:#f92672">=</span> [<span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">5</span>]
+<span style="color:#f92672">import</span> cufflinks <span style="color:#f92672">as</span> cf
+cf<span style="color:#f92672">.</span>go_offline()
+cf<span style="color:#f92672">.</span>set_config_file(offline<span style="color:#f92672">=</span>False, world_readable<span style="color:#f92672">=</span>True)
+<span style="color:#75715e"># NLTK 包</span>
+<span style="color:#f92672">import</span> nltk
+<span style="color:#f92672">import</span> re
+<span style="color:#f92672">import</span> string
+<span style="color:#f92672">from</span> nltk.corpus <span style="color:#f92672">import</span> stopwords
+<span style="color:#f92672">from</span> wordcloud <span style="color:#f92672">import</span> WordCloud,STOPWORDS
+<span style="color:#f92672">from</span> nltk.stem.porter <span style="color:#f92672">import</span> PorterStemmer
+<span style="color:#f92672">from</span> sklearn.feature_extraction.text <span style="color:#f92672">import</span> TfidfVectorizer
+<span style="color:#f92672">from</span> sklearn.feature_extraction.text <span style="color:#f92672">import</span> CountVectorizer
+<span style="color:#75715e"># Machine Learning libraries</span>
+<span style="color:#f92672">import</span> sklearn 
+<span style="color:#f92672">from</span> sklearn.model_selection <span style="color:#f92672">import</span> GridSearchCV
+<span style="color:#f92672">from</span> sklearn.linear_model <span style="color:#f92672">import</span> LogisticRegression
+<span style="color:#f92672">from</span> sklearn.tree <span style="color:#f92672">import</span> DecisionTreeClassifier
+<span style="color:#f92672">from</span> sklearn.naive_bayes <span style="color:#f92672">import</span> MultinomialNB 
+<span style="color:#f92672">from</span> sklearn.neighbors <span style="color:#f92672">import</span> KNeighborsClassifier
+<span style="color:#f92672">from</span> sklearn.model_selection <span style="color:#f92672">import</span> train_test_split
+ 
+<span style="color:#75715e"># 评估</span>
+<span style="color:#f92672">from</span> sklearn <span style="color:#f92672">import</span> metrics
+<span style="color:#f92672">from</span> sklearn.metrics <span style="color:#f92672">import</span> classification_report
+<span style="color:#f92672">from</span> sklearn.model_selection <span style="color:#f92672">import</span> cross_val_score
+<span style="color:#f92672">from</span> sklearn.metrics <span style="color:#f92672">import</span> roc_auc_score
+<span style="color:#f92672">from</span> sklearn.metrics <span style="color:#f92672">import</span> roc_curve
+<span style="color:#f92672">from</span> sklearn.metrics <span style="color:#f92672">import</span> confusion_matrix
+<span style="color:#f92672">from</span> sklearn.metrics <span style="color:#f92672">import</span> accuracy_score
+<span style="color:#75715e"># 集合</span>
+<span style="color:#f92672">from</span> collections <span style="color:#f92672">import</span> Counter
+<span style="color:#75715e"># 忽略警告</span>
+<span style="color:#f92672">import</span> warnings
+warnings<span style="color:#f92672">.</span>filterwarnings(<span style="color:#e6db74">&#39;ignore&#39;</span>)
+<span style="color:#75715e"># 深度学习</span>
+<span style="color:#f92672">from</span> tensorflow.keras.layers <span style="color:#f92672">import</span> Embedding
+<span style="color:#f92672">from</span> tensorflow.keras.preprocessing.sequence <span style="color:#f92672">import</span> pad_sequences
+<span style="color:#f92672">from</span> tensorflow.keras.models <span style="color:#f92672">import</span> Sequential
+<span style="color:#f92672">from</span> tensorflow.keras.preprocessing.text <span style="color:#f92672">import</span> one_hot
+<span style="color:#f92672">from</span> tensorflow.keras.layers <span style="color:#f92672">import</span> LSTM
+<span style="color:#f92672">from</span> tensorflow.keras.layers <span style="color:#f92672">import</span> Bidirectional
+<span style="color:#f92672">from</span> tensorflow.keras.layers <span style="color:#f92672">import</span> Dense
+<span style="color:#f92672">from</span> tensorflow.keras.layers <span style="color:#f92672">import</span> Dropout
+</code></pre></div><h2 id="加载数据">加载数据</h2>
+<p>数据下载链接：<a href="https://www.kaggle.com/clmentbisaillon/fake-and-real-news-dataset" target="_blank">添加链接描述</a>
+</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 读取数据集</span>
+fake_news <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#39;data/Fake.csv&#39;</span>)
+true_news <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#39;data/True.csv&#39;</span>)
+<span style="color:#75715e"># 虚假新闻数据集的大小以及字段</span>
+<span style="color:#66d9ef">print</span> (<span style="color:#e6db74">&#34;The shape of the  data is (row, column):&#34;</span><span style="color:#f92672">+</span> str(fake_news<span style="color:#f92672">.</span>shape))
+<span style="color:#66d9ef">print</span> (fake_news<span style="color:#f92672">.</span>info())
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74"> --------------------------------------- </span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)
+<span style="color:#75715e"># 真实新闻数据集的大小以及字段</span>
+<span style="color:#66d9ef">print</span> (<span style="color:#e6db74">&#34;The shape of the  data is (row, column):&#34;</span><span style="color:#f92672">+</span> str(true_news<span style="color:#f92672">.</span>shape))
+<span style="color:#66d9ef">print</span> (true_news<span style="color:#f92672">.</span>info())
+</code></pre></div><h2 id="数据集的详情">数据集的详情</h2>
+<p>数据有2个CSV文件，其中一个数据集包含假新闻，另一个包真新闻，有将近23481个假新闻和21417个真新闻。
+文件中列名的描述:</p>
+<ul>
+<li>title-包含新闻标题</li>
+<li>text-包含新闻内容/文章</li>
+<li>subject-新闻的主题</li>
+<li>date-消息发布的日期</li>
+</ul>
+<h2 id="数据预处理与文本清洗">数据预处理与文本清洗</h2>
+<p>在执行EDA并将数据提供给模型之前，我们必须执行某些预处理步骤：</p>
+<h4 id="创建目标列">创建目标列</h4>
+<p>让我们为假新闻和真新闻创建目标列。在这里，我们将目标值表示为“ 0”（假新闻），“ 1”（真新闻）。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#假新闻的目标变量</span>
+fake_news[<span style="color:#e6db74">&#39;output&#39;</span>]<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>
+<span style="color:#75715e">#真新闻的目标变量</span>
+true_news[<span style="color:#e6db74">&#39;output&#39;</span>]<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</code></pre></div><h4 id="拼接新闻标题和内容">拼接新闻标题和内容</h4>
+<p>新闻是将根据标题和文本进行分类。 分开处理新闻标题和内容不会带来任何好处。 因此，我们将两个数据集中的两个列连接起来。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#合并title与text合并为news</span>
+fake_news[<span style="color:#e6db74">&#39;news&#39;</span>]<span style="color:#f92672">=</span>fake_news[<span style="color:#e6db74">&#39;title&#39;</span>]<span style="color:#f92672">+</span>fake_news[<span style="color:#e6db74">&#39;text&#39;</span>]
+fake_news<span style="color:#f92672">=</span>fake_news<span style="color:#f92672">.</span>drop([<span style="color:#e6db74">&#39;title&#39;</span>, <span style="color:#e6db74">&#39;text&#39;</span>], axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+<span style="color:#75715e">#合并title与text合并为news</span>
+true_news[<span style="color:#e6db74">&#39;news&#39;</span>]<span style="color:#f92672">=</span>true_news[<span style="color:#e6db74">&#39;title&#39;</span>]<span style="color:#f92672">+</span>true_news[<span style="color:#e6db74">&#39;text&#39;</span>]
+true_news<span style="color:#f92672">=</span>true_news<span style="color:#f92672">.</span>drop([<span style="color:#e6db74">&#39;title&#39;</span>, <span style="color:#e6db74">&#39;text&#39;</span>], axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+<span style="color:#75715e"># 重构表格</span>
+fake_news <span style="color:#f92672">=</span> fake_news[[<span style="color:#e6db74">&#39;subject&#39;</span>, <span style="color:#e6db74">&#39;date&#39;</span>, <span style="color:#e6db74">&#39;news&#39;</span>,<span style="color:#e6db74">&#39;output&#39;</span>]]
+true_news <span style="color:#f92672">=</span> true_news[[<span style="color:#e6db74">&#39;subject&#39;</span>, <span style="color:#e6db74">&#39;date&#39;</span>, <span style="color:#e6db74">&#39;news&#39;</span>,<span style="color:#e6db74">&#39;output&#39;</span>]]
+</code></pre></div><h4 id="将日期列转换为日期时间格式">将日期列转换为日期时间格式</h4>
+<p>我们可以使用pd.datetime将日期列转换为所需的日期格式。尤其是在fake_news date列中，让我们检查value_counts（）看看里面有什么。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">ffake_news[<span style="color:#e6db74">&#39;date&#39;</span>]<span style="color:#f92672">.</span>value_counts()
+Out[<span style="color:#ae81ff">7</span>]:
+
+May <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">2017</span>         <span style="color:#ae81ff">46</span>
+May <span style="color:#ae81ff">26</span>, <span style="color:#ae81ff">2016</span>         <span style="color:#ae81ff">44</span>
+May <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">2016</span>          <span style="color:#ae81ff">44</span>
+May <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">2016</span>          <span style="color:#ae81ff">44</span>
+May <span style="color:#ae81ff">11</span>, <span style="color:#ae81ff">2016</span>         <span style="color:#ae81ff">43</span>
+                     <span style="color:#f92672">..</span>
+November <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">2017</span>     <span style="color:#ae81ff">1</span>
+Jun <span style="color:#ae81ff">21</span>, <span style="color:#ae81ff">2015</span>          <span style="color:#ae81ff">1</span>
+December <span style="color:#ae81ff">11</span>, <span style="color:#ae81ff">2017</span>     <span style="color:#ae81ff">1</span>
+Apr <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2015</span>           <span style="color:#ae81ff">1</span>
+Jul <span style="color:#ae81ff">19</span>, <span style="color:#ae81ff">2015</span>          <span style="color:#ae81ff">1</span>
+Name: date, Length: <span style="color:#ae81ff">1681</span>, dtype: int64
+</code></pre></div><p><img class="img-fluid" src="https://img-blog.csdnimg.cn/20210227121742568.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3MTk3ODgz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"  loading="lazy" />
+
+如果您注意到，我们在日期列内有链接和新闻标题，这在转换为日期时间格式时会给我们带来麻烦。因此，让我们从列中删除这些记录。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 删除含有链接以及Host的数据 </span>
+fake_news<span style="color:#f92672">=</span>fake_news[<span style="color:#f92672">~</span>fake_news<span style="color:#f92672">.</span>date<span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>contains(<span style="color:#e6db74">&#34;http&#34;</span>)]
+fake_news<span style="color:#f92672">=</span>fake_news[<span style="color:#f92672">~</span>fake_news<span style="color:#f92672">.</span>date<span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>contains(<span style="color:#e6db74">&#34;HOST&#34;</span>)]
+<span style="color:#75715e"># &#39;&#39;&#39;等效&#39;&#39;&#39;</span>
+<span style="color:#75715e">#fake_news=fake_news[fake_news.date.str.contains(&#34;Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec&#34;)]</span>
+<span style="color:#960050;background-color:#1e0010">只有假新闻数据集的日期列存在问题。现在，我们将日期列转换为日期时间格式</span>
+
+In [<span style="color:#ae81ff">10</span>]:
+
+
+
+<span style="color:#75715e"># 将日期列转为时间格式</span>
+fake_news[<span style="color:#e6db74">&#39;date&#39;</span>] <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>to_datetime(fake_news[<span style="color:#e6db74">&#39;date&#39;</span>])
+true_news[<span style="color:#e6db74">&#39;date&#39;</span>] <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>to_datetime(true_news[<span style="color:#e6db74">&#39;date&#39;</span>])
+</code></pre></div><h4 id="合并数据集">合并数据集</h4>
+<p>当我们为模型提供数据集时，我们必须将其作为单个文件提供。因此，最好同时添加真假新闻数据，并对其进行进一步预处理并执行EDA。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">frames <span style="color:#f92672">=</span> [fake_news, true_news]
+news_dataset <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>concat(frames)
+news_dataset
+Out[<span style="color:#ae81ff">11</span>]:
+
+
+subject	date	news	output
+<span style="color:#ae81ff">0</span>	News	<span style="color:#ae81ff">2017</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">31</span>	Donald Trump Sends Out Embarrassing New Year<span style="color:#960050;background-color:#1e0010">’</span><span style="color:#f92672">...</span>	<span style="color:#ae81ff">0</span>
+<span style="color:#ae81ff">1</span>	News	<span style="color:#ae81ff">2017</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">31</span>	Drunk Bragging Trump Staffer Started Russian <span style="color:#f92672">...</span>	<span style="color:#ae81ff">0</span>
+<span style="color:#ae81ff">2</span>	News	<span style="color:#ae81ff">2017</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">30</span>	Sheriff David Clarke Becomes An Internet Joke<span style="color:#f92672">...</span>	<span style="color:#ae81ff">0</span>
+<span style="color:#ae81ff">3</span>	News	<span style="color:#ae81ff">2017</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">29</span>	Trump Is So Obsessed He Even Has Obama<span style="color:#960050;background-color:#1e0010">’</span>s Name<span style="color:#f92672">...</span>	<span style="color:#ae81ff">0</span>
+<span style="color:#ae81ff">4</span>	News	<span style="color:#ae81ff">2017</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">25</span>	Pope Francis Just Called Out Donald Trump Dur<span style="color:#f92672">...</span>	<span style="color:#ae81ff">0</span>
+<span style="color:#f92672">...</span>	<span style="color:#f92672">...</span>	<span style="color:#f92672">...</span>	<span style="color:#f92672">...</span>	<span style="color:#f92672">...</span>
+<span style="color:#ae81ff">21412</span>	worldnews	<span style="color:#ae81ff">2017</span><span style="color:#f92672">-</span><span style="color:#ae81ff">08</span><span style="color:#f92672">-</span><span style="color:#ae81ff">22</span>	<span style="color:#e6db74">&#39;Fully committed&#39;</span> NATO backs new U<span style="color:#f92672">.</span>S<span style="color:#f92672">.</span> approach<span style="color:#f92672">...</span>	<span style="color:#ae81ff">1</span>
+<span style="color:#ae81ff">21413</span>	worldnews	<span style="color:#ae81ff">2017</span><span style="color:#f92672">-</span><span style="color:#ae81ff">08</span><span style="color:#f92672">-</span><span style="color:#ae81ff">22</span>	LexisNexis withdrew two products <span style="color:#f92672">from</span> Chinese ...	<span style="color:#ae81ff">1</span>
+<span style="color:#ae81ff">21414</span>	worldnews	<span style="color:#ae81ff">2017</span><span style="color:#f92672">-</span><span style="color:#ae81ff">08</span><span style="color:#f92672">-</span><span style="color:#ae81ff">22</span>	Minsk cultural hub becomes haven <span style="color:#f92672">from</span> authorit...	<span style="color:#ae81ff">1</span>
+<span style="color:#ae81ff">21415</span>	worldnews	<span style="color:#ae81ff">2017</span><span style="color:#f92672">-</span><span style="color:#ae81ff">08</span><span style="color:#f92672">-</span><span style="color:#ae81ff">22</span>	Vatican upbeat on possibility of Pope Francis <span style="color:#f92672">...</span>	<span style="color:#ae81ff">1</span>
+<span style="color:#ae81ff">21416</span>	worldnews	<span style="color:#ae81ff">2017</span><span style="color:#f92672">-</span><span style="color:#ae81ff">08</span><span style="color:#f92672">-</span><span style="color:#ae81ff">22</span>	Indonesia to buy <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">1.14</span> billion worth of Russia<span style="color:#f92672">...</span>	<span style="color:#ae81ff">1</span>
+<span style="color:#ae81ff">44888</span> rows <span style="color:#960050;background-color:#1e0010">×</span> <span style="color:#ae81ff">4</span> columns
+</code></pre></div><h2 id="文本处理">文本处理</h2>
+<p>对于任何文本分析应用程序来说，这都是重要的阶段。 新闻中将有很多无用的内容，这可能会阻碍机器学习模型的发展。 除非我们删除它们，否则机器学习模型将无法有效运行。 让我们一步一步走。</p>
+<h4 id="标点符号去除">标点符号去除</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">clean_news<span style="color:#f92672">=</span>news_dataset<span style="color:#f92672">.</span>copy()
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">review_cleaning</span>(text):
+    <span style="color:#e6db74">&#39;&#39;&#39;Make text lowercase, remove text in square brackets,remove links,remove punctuation
+</span><span style="color:#e6db74">    and remove words containing numbers.&#39;&#39;&#39;</span>
+    text <span style="color:#f92672">=</span> str(text)<span style="color:#f92672">.</span>lower()
+    text <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>sub(<span style="color:#e6db74">&#39;\[.*?\]&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>, text)
+    text <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>sub(<span style="color:#e6db74">&#39;https?://\S+|www\.\S+&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>, text)
+    text <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>sub(<span style="color:#e6db74">&#39;&lt;.*?&gt;+&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>, text)
+    text <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>sub(<span style="color:#e6db74">&#39;[</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">]&#39;</span> <span style="color:#f92672">%</span> re<span style="color:#f92672">.</span>escape(string<span style="color:#f92672">.</span>punctuation), <span style="color:#e6db74">&#39;&#39;</span>, text)
+    text <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>sub(<span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>, text)
+    text <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>sub(<span style="color:#e6db74">&#39;\w*\d\w*&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>, text)
+    <span style="color:#66d9ef">return</span> text
+clean_news[<span style="color:#e6db74">&#39;news&#39;</span>]<span style="color:#f92672">=</span>clean_news[<span style="color:#e6db74">&#39;news&#39;</span>]<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> x:review_cleaning(x))
+clean_news<span style="color:#f92672">.</span>head()
+Out[<span style="color:#ae81ff">13</span>]:
+
+
+subject	date	news	output
+<span style="color:#ae81ff">0</span>	News	<span style="color:#ae81ff">2017</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">31</span>	donald trump sends out embarrassing new year<span style="color:#960050;background-color:#1e0010">’</span><span style="color:#f92672">...</span>	<span style="color:#ae81ff">0</span>
+<span style="color:#ae81ff">1</span>	News	<span style="color:#ae81ff">2017</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">31</span>	drunk bragging trump staffer started russian <span style="color:#f92672">...</span>	<span style="color:#ae81ff">0</span>
+<span style="color:#ae81ff">2</span>	News	<span style="color:#ae81ff">2017</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">30</span>	sheriff david clarke becomes an internet joke<span style="color:#f92672">...</span>	<span style="color:#ae81ff">0</span>
+<span style="color:#ae81ff">3</span>	News	<span style="color:#ae81ff">2017</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">29</span>	trump <span style="color:#f92672">is</span> so obsessed he even has obama<span style="color:#960050;background-color:#1e0010">’</span>s name<span style="color:#f92672">...</span>	<span style="color:#ae81ff">0</span>
+<span style="color:#ae81ff">4</span>	News	<span style="color:#ae81ff">2017</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">25</span>	pope francis just called out donald trump dur<span style="color:#f92672">...</span>	<span style="color:#ae81ff">0</span>
+
+</code></pre></div><h4 id="停用词去除">停用词去除</h4>
+<p>停止词是一个常用的词(例如“the”，“A”，“an”，“in”)，搜索引擎在为搜索条目建立索引和作为搜索查询的结果检索它们时都忽略它。我们不希望这些词占用数据库中的空间，或占用宝贵的处理时间。为此，我们可以很容易地删除它们，方法是存储一组你认为可以终止单词的单词。python中的NLTK(自然语言工具包)有一个以16种不同语言存储的stopwords列表。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> nltk
+nltk<span style="color:#f92672">.</span>download(<span style="color:#e6db74">&#39;stopwords&#39;</span>)
+[nltk_data] Downloading package stopwords to
+[nltk_data]     C:\Users\yanqiang\AppData\Roaming\nltk_data<span style="color:#f92672">...</span>
+[nltk_data]   Unzipping corpora\stopwords<span style="color:#f92672">.</span>zip<span style="color:#f92672">.</span>
+Out[<span style="color:#ae81ff">15</span>]:
+
+True
+In [<span style="color:#ae81ff">16</span>]:
+
+
+
+stop <span style="color:#f92672">=</span> stopwords<span style="color:#f92672">.</span>words(<span style="color:#e6db74">&#39;english&#39;</span>)
+clean_news[<span style="color:#e6db74">&#39;news&#39;</span>] <span style="color:#f92672">=</span> clean_news[<span style="color:#e6db74">&#39;news&#39;</span>]<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> x: <span style="color:#e6db74">&#39; &#39;</span><span style="color:#f92672">.</span>join([word <span style="color:#66d9ef">for</span> word <span style="color:#f92672">in</span> x<span style="color:#f92672">.</span>split() <span style="color:#66d9ef">if</span> word <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> (stop)]))
+clean_news<span style="color:#f92672">.</span>head()
+Out[<span style="color:#ae81ff">16</span>]:
+
+
+subject	date	news	output
+<span style="color:#ae81ff">0</span>	News	<span style="color:#ae81ff">2017</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">31</span>	donald trump sends embarrassing new year<span style="color:#960050;background-color:#1e0010">’</span>s eve<span style="color:#f92672">...</span>	<span style="color:#ae81ff">0</span>
+<span style="color:#ae81ff">1</span>	News	<span style="color:#ae81ff">2017</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">31</span>	drunk bragging trump staffer started russian c<span style="color:#f92672">...</span>	<span style="color:#ae81ff">0</span>
+<span style="color:#ae81ff">2</span>	News	<span style="color:#ae81ff">2017</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">30</span>	sheriff david clarke becomes internet joke thr<span style="color:#f92672">...</span>	<span style="color:#ae81ff">0</span>
+<span style="color:#ae81ff">3</span>	News	<span style="color:#ae81ff">2017</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">29</span>	trump obsessed even obama<span style="color:#960050;background-color:#1e0010">’</span>s name coded website<span style="color:#f92672">...</span>	<span style="color:#ae81ff">0</span>
+<span style="color:#ae81ff">4</span>	News	<span style="color:#ae81ff">2017</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">25</span>	pope francis called donald trump christmas spe<span style="color:#f92672">...</span>	<span style="color:#ae81ff">0</span>
+</code></pre></div><h2 id="新闻的事件演变和可视化">新闻的事件演变和可视化</h2>
+<p>在本节中，我们将完成对新闻的探索性数据分析，例如ngram分析，并了解哪些是所有单词，上下文（最有可能在伪造的new中找到）。</p>
+<h4 id="新闻主题数">新闻主题数</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">ax <span style="color:#f92672">=</span> sns<span style="color:#f92672">.</span>countplot(x<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;subject&#34;</span>, data<span style="color:#f92672">=</span>clean_news,
+                   facecolor<span style="color:#f92672">=</span>(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>),
+                   linewidth<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>,
+                   edgecolor<span style="color:#f92672">=</span>sns<span style="color:#f92672">.</span>color_palette(<span style="color:#e6db74">&#34;dark&#34;</span>, <span style="color:#ae81ff">3</span>))
+<span style="color:#75715e"># 设置label与字体大小</span>
+ax<span style="color:#f92672">.</span>set(xlabel<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Type of news&#39;</span>, ylabel<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Number of news&#39;</span>,title<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Count of news type&#39;</span>)
+ax<span style="color:#f92672">.</span>xaxis<span style="color:#f92672">.</span>get_label()<span style="color:#f92672">.</span>set_fontsize(<span style="color:#ae81ff">15</span>)
+ax<span style="color:#f92672">.</span>yaxis<span style="color:#f92672">.</span>get_label()<span style="color:#f92672">.</span>set_fontsize(<span style="color:#ae81ff">15</span>)
+</code></pre></div><p><img class="img-fluid" src="https://img-blog.csdnimg.cn/20210227122112567.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3MTk3ODgz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"  loading="lazy" />
+</p>
+<h4 id="基于真假的新闻主题计数">基于真假的新闻主题计数</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">g <span style="color:#f92672">=</span> sns<span style="color:#f92672">.</span>catplot(x<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;subject&#34;</span>, col<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;output&#34;</span>,
+                data<span style="color:#f92672">=</span>clean_news, kind<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;count&#34;</span>,
+                height<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>, aspect<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)
+<span style="color:#75715e"># 旋转x轴</span>
+g<span style="color:#f92672">.</span>set_xticklabels(rotation<span style="color:#f92672">=</span><span style="color:#ae81ff">45</span>)
+Out[<span style="color:#ae81ff">22</span>]:
+
+<span style="color:#f92672">&lt;</span>seaborn<span style="color:#f92672">.</span>axisgrid<span style="color:#f92672">.</span>FacetGrid at <span style="color:#ae81ff">0x2308e99f608</span><span style="color:#f92672">&gt;</span>
+</code></pre></div><p><img class="img-fluid" src="https://img-blog.csdnimg.cn/20210227122143136.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3MTk3ODgz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"  loading="lazy" />
+
+发现：</p>
+<ul>
+<li>假新闻无处不在，政治和世界新闻除外</li>
+<li>真正的新闻只存在于政治和世界新闻中，而且数量很高</li>
+<li>这是一个高度偏差的数据集，考虑到数据集的质量较差，我们可以期望更高的准确性，但这并不意味着它是一个好的模型</li>
+</ul>
+<h4 id="真假新闻统计">真假新闻统计</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">ax<span style="color:#f92672">=</span>sns<span style="color:#f92672">.</span>countplot(x<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;output&#34;</span>, data<span style="color:#f92672">=</span>clean_news)
+<span style="color:#75715e"># 设置label以及字体大小</span>
+ax<span style="color:#f92672">.</span>set(xlabel<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Output&#39;</span>, ylabel<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Count of fake/true&#39;</span>,title<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Count of fake and true news&#39;</span>)
+ax<span style="color:#f92672">.</span>xaxis<span style="color:#f92672">.</span>get_label()<span style="color:#f92672">.</span>set_fontsize(<span style="color:#ae81ff">15</span>)
+ax<span style="color:#f92672">.</span>yaxis<span style="color:#f92672">.</span>get_label()<span style="color:#f92672">.</span>set_fontsize(<span style="color:#ae81ff">15</span>)
+</code></pre></div><p><img class="img-fluid" src="https://img-blog.csdnimg.cn/20210227122225509.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3MTk3ODgz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"  loading="lazy" />
+
+发现：</p>
+<ul>
+<li>我们有一个非常平衡的数据</li>
+<li>但是，假新闻的数量要比真实新闻的数量高，但程度不大</li>
+</ul>
+<h4 id="从新闻中提取新特征">从新闻中提取新特征</h4>
+<p>让我们从新闻特征中提取更多的特征，比如</p>
+<ul>
+<li>极性:表示新闻情感的尺度</li>
+<li>评论长度:新闻的长度(字母和空格的数量)</li>
+<li>单词数:新闻中单词的数量</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 从新闻中提取新特征</span>
+clean_news[<span style="color:#e6db74">&#39;polarity&#39;</span>] <span style="color:#f92672">=</span> clean_news[<span style="color:#e6db74">&#39;news&#39;</span>]<span style="color:#f92672">.</span>map(<span style="color:#66d9ef">lambda</span> text: TextBlob(text)<span style="color:#f92672">.</span>sentiment<span style="color:#f92672">.</span>polarity)
+clean_news[<span style="color:#e6db74">&#39;review_len&#39;</span>] <span style="color:#f92672">=</span> clean_news[<span style="color:#e6db74">&#39;news&#39;</span>]<span style="color:#f92672">.</span>astype(str)<span style="color:#f92672">.</span>apply(len)
+clean_news[<span style="color:#e6db74">&#39;word_count&#39;</span>] <span style="color:#f92672">=</span> clean_news[<span style="color:#e6db74">&#39;news&#39;</span>]<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> x: len(str(x)<span style="color:#f92672">.</span>split()))
+<span style="color:#75715e"># 新特征分布</span>
+plt<span style="color:#f92672">.</span>figure(figsize <span style="color:#f92672">=</span> (<span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">5</span>))
+plt<span style="color:#f92672">.</span>style<span style="color:#f92672">.</span>use(<span style="color:#e6db74">&#39;seaborn-white&#39;</span>)
+plt<span style="color:#f92672">.</span>subplot(<span style="color:#ae81ff">131</span>)
+sns<span style="color:#f92672">.</span>distplot(clean_news[<span style="color:#e6db74">&#39;polarity&#39;</span>])
+fig <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>gcf()
+plt<span style="color:#f92672">.</span>subplot(<span style="color:#ae81ff">132</span>)
+sns<span style="color:#f92672">.</span>distplot(clean_news[<span style="color:#e6db74">&#39;review_len&#39;</span>])
+fig <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>gcf()
+plt<span style="color:#f92672">.</span>subplot(<span style="color:#ae81ff">133</span>)
+sns<span style="color:#f92672">.</span>distplot(clean_news[<span style="color:#e6db74">&#39;word_count&#39;</span>])
+fig <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>gcf()
+</code></pre></div><p><img class="img-fluid" src="https://img-blog.csdnimg.cn/20210227122327924.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3MTk3ODgz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"  loading="lazy" />
+
+发现：</p>
+<ul>
+<li>大部分极性是中性的，既不表示坏消息也不表示高兴消息。</li>
+<li>字数在0到1000之间，新闻的长度在0到5000之间，并且接近1000个单词，这可能是一篇文章。</li>
+</ul>
+<h2 id="n-gram分析">N-gram分析</h2>
+<h4 id="新闻中的前20个词">新闻中的前20个词</h4>
+<p>让我们看一下新闻中的前20个词，这可以让我们简要了解一下数据集中最受欢迎的新闻。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 获取topn的词</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_top_n_words</span>(corpus, n<span style="color:#f92672">=</span>None):
+    vec <span style="color:#f92672">=</span> CountVectorizer()<span style="color:#f92672">.</span>fit(corpus)
+    bag_of_words <span style="color:#f92672">=</span> vec<span style="color:#f92672">.</span>transform(corpus)
+    sum_words <span style="color:#f92672">=</span> bag_of_words<span style="color:#f92672">.</span>sum(axis<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>) 
+    words_freq <span style="color:#f92672">=</span> [(word, sum_words[<span style="color:#ae81ff">0</span>, idx]) <span style="color:#66d9ef">for</span> word, idx <span style="color:#f92672">in</span> vec<span style="color:#f92672">.</span>vocabulary_<span style="color:#f92672">.</span>items()]
+    words_freq <span style="color:#f92672">=</span>sorted(words_freq, key <span style="color:#f92672">=</span> <span style="color:#66d9ef">lambda</span> x: x[<span style="color:#ae81ff">1</span>], reverse<span style="color:#f92672">=</span>True)
+    <span style="color:#66d9ef">return</span> words_freq[:n]
+<span style="color:#75715e"># 获取top20常见的词</span>
+common_words <span style="color:#f92672">=</span> get_top_n_words(clean_news[<span style="color:#e6db74">&#39;news&#39;</span>], <span style="color:#ae81ff">20</span>)
+<span style="color:#75715e"># 打印词频</span>
+<span style="color:#66d9ef">for</span> word, freq <span style="color:#f92672">in</span> common_words:
+    <span style="color:#66d9ef">print</span>(word, freq)
+<span style="color:#75715e"># 创建词与词频的dataframe</span>
+df1 <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame(common_words, columns <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;news&#39;</span> , <span style="color:#e6db74">&#39;count&#39;</span>])
+df1<span style="color:#f92672">.</span>groupby(<span style="color:#e6db74">&#39;news&#39;</span>)<span style="color:#f92672">.</span>sum()[<span style="color:#e6db74">&#39;count&#39;</span>]<span style="color:#f92672">.</span>sort_values(ascending<span style="color:#f92672">=</span>False)<span style="color:#f92672">.</span>iplot(
+    kind<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;bar&#39;</span>, yTitle<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Count&#39;</span>, linecolor<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;black&#39;</span>, title<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Top 20 words in news&#39;</span>)
+trump <span style="color:#ae81ff">140400</span>
+said <span style="color:#ae81ff">130258</span>
+us <span style="color:#ae81ff">68081</span>
+would <span style="color:#ae81ff">55422</span>
+president <span style="color:#ae81ff">53189</span>
+people <span style="color:#ae81ff">41718</span>
+one <span style="color:#ae81ff">36146</span>
+state <span style="color:#ae81ff">33190</span>
+new <span style="color:#ae81ff">31799</span>
+also <span style="color:#ae81ff">31209</span>
+obama <span style="color:#ae81ff">29881</span>
+clinton <span style="color:#ae81ff">29003</span>
+house <span style="color:#ae81ff">28716</span>
+government <span style="color:#ae81ff">27392</span>
+donald <span style="color:#ae81ff">27376</span>
+reuters <span style="color:#ae81ff">27348</span>
+states <span style="color:#ae81ff">26331</span>
+republican <span style="color:#ae81ff">25287</span>
+could <span style="color:#ae81ff">24356</span>
+white <span style="color:#ae81ff">23823</span>
+</code></pre></div><p><img class="img-fluid" src="https://img-blog.csdnimg.cn/20210227122450931.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3MTk3ODgz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"  loading="lazy" />
+
+发现：</p>
+<ul>
+<li>所有前20条新闻都与美国政府有关</li>
+<li>特别是关于特朗普和美国，其次是奥巴马</li>
+<li>我们可以了解到，新闻来自路透社。</li>
+</ul>
+<h4 id="新闻中的topn的2个词组合">新闻中的topn的2个词组合</h4>
+<p>现在，让我们将探索范围扩展到新闻中的最常见的2个词组合。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_top_n_bigram</span>(corpus, n<span style="color:#f92672">=</span>None):
+    vec <span style="color:#f92672">=</span> CountVectorizer(ngram_range<span style="color:#f92672">=</span>(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>))<span style="color:#f92672">.</span>fit(corpus)
+    bag_of_words <span style="color:#f92672">=</span> vec<span style="color:#f92672">.</span>transform(corpus)
+    sum_words <span style="color:#f92672">=</span> bag_of_words<span style="color:#f92672">.</span>sum(axis<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>) 
+    words_freq <span style="color:#f92672">=</span> [(word, sum_words[<span style="color:#ae81ff">0</span>, idx]) <span style="color:#66d9ef">for</span> word, idx <span style="color:#f92672">in</span> vec<span style="color:#f92672">.</span>vocabulary_<span style="color:#f92672">.</span>items()]
+    words_freq <span style="color:#f92672">=</span>sorted(words_freq, key <span style="color:#f92672">=</span> <span style="color:#66d9ef">lambda</span> x: x[<span style="color:#ae81ff">1</span>], reverse<span style="color:#f92672">=</span>True)
+    <span style="color:#66d9ef">return</span> words_freq[:n]
+common_words <span style="color:#f92672">=</span> get_top_n_bigram(clean_news[<span style="color:#e6db74">&#39;news&#39;</span>], <span style="color:#ae81ff">20</span>)
+<span style="color:#66d9ef">for</span> word, freq <span style="color:#f92672">in</span> common_words:
+    <span style="color:#66d9ef">print</span>(word, freq)
+    
+df3 <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame(common_words, columns <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;news&#39;</span> , <span style="color:#e6db74">&#39;count&#39;</span>])
+df3<span style="color:#f92672">.</span>groupby(<span style="color:#e6db74">&#39;news&#39;</span>)<span style="color:#f92672">.</span>sum()[<span style="color:#e6db74">&#39;count&#39;</span>]<span style="color:#f92672">.</span>sort_values(ascending<span style="color:#f92672">=</span>False)<span style="color:#f92672">.</span>iplot(
+    kind<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;bar&#39;</span>, yTitle<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Count&#39;</span>, linecolor<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;black&#39;</span>, title<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Top 20 bigrams in news&#39;</span>)
+donald trump <span style="color:#ae81ff">25059</span>
+united states <span style="color:#ae81ff">18394</span>
+white house <span style="color:#ae81ff">15485</span>
+hillary clinton <span style="color:#ae81ff">9502</span>
+new york <span style="color:#ae81ff">8110</span>
+north korea <span style="color:#ae81ff">7053</span>
+president donald <span style="color:#ae81ff">6928</span>
+image via <span style="color:#ae81ff">6188</span>
+barack obama <span style="color:#ae81ff">5603</span>
+trump said <span style="color:#ae81ff">4816</span>
+prime minister <span style="color:#ae81ff">4753</span>
+president trump <span style="color:#ae81ff">4646</span>
+supreme court <span style="color:#ae81ff">4595</span>
+last year <span style="color:#ae81ff">4560</span>
+last week <span style="color:#ae81ff">4512</span>
+said statement <span style="color:#ae81ff">4425</span>
+fox news <span style="color:#ae81ff">4074</span>
+president obama <span style="color:#ae81ff">4065</span>
+islamic state <span style="color:#ae81ff">4014</span>
+national security <span style="color:#ae81ff">3858</span>
+</code></pre></div><p><img class="img-fluid" src="https://img-blog.csdnimg.cn/20210227122548909.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3MTk3ODgz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"  loading="lazy" />
+
+发现：</p>
+<ul>
+<li>如我们所担心的那样，考虑到王牌新闻的数量，我认为该模型的结果会有偏差</li>
+<li>我们也可以看到朝鲜的新闻，我想这将是关于美国和NK之间的争端</li>
+<li>fox 新闻也很少有新闻</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_top_n_trigram</span>(corpus, n<span style="color:#f92672">=</span>None):
+    vec <span style="color:#f92672">=</span> CountVectorizer(ngram_range<span style="color:#f92672">=</span>(<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">3</span>), stop_words<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;english&#39;</span>)<span style="color:#f92672">.</span>fit(corpus)
+    bag_of_words <span style="color:#f92672">=</span> vec<span style="color:#f92672">.</span>transform(corpus)
+    sum_words <span style="color:#f92672">=</span> bag_of_words<span style="color:#f92672">.</span>sum(axis<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>) 
+    words_freq <span style="color:#f92672">=</span> [(word, sum_words[<span style="color:#ae81ff">0</span>, idx]) <span style="color:#66d9ef">for</span> word, idx <span style="color:#f92672">in</span> vec<span style="color:#f92672">.</span>vocabulary_<span style="color:#f92672">.</span>items()]
+    words_freq <span style="color:#f92672">=</span>sorted(words_freq, key <span style="color:#f92672">=</span> <span style="color:#66d9ef">lambda</span> x: x[<span style="color:#ae81ff">1</span>], reverse<span style="color:#f92672">=</span>True)
+    <span style="color:#66d9ef">return</span> words_freq[:n]
+common_words <span style="color:#f92672">=</span> get_top_n_trigram(clean_news[<span style="color:#e6db74">&#39;news&#39;</span>], <span style="color:#ae81ff">20</span>)
+<span style="color:#66d9ef">for</span> word, freq <span style="color:#f92672">in</span> common_words:
+    <span style="color:#66d9ef">print</span>(word, freq)
+df6 <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame(common_words, columns <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;news&#39;</span> , <span style="color:#e6db74">&#39;count&#39;</span>])
+df6<span style="color:#f92672">.</span>groupby(<span style="color:#e6db74">&#39;news&#39;</span>)<span style="color:#f92672">.</span>sum()[<span style="color:#e6db74">&#39;count&#39;</span>]<span style="color:#f92672">.</span>sort_values(ascending<span style="color:#f92672">=</span>False)<span style="color:#f92672">.</span>iplot(
+    kind<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;bar&#39;</span>, yTitle<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Count&#39;</span>, linecolor<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;black&#39;</span>, title<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Top 20 trigrams in news&#39;</span>)
+president donald trump <span style="color:#ae81ff">6808</span>
+president barack obama <span style="color:#ae81ff">3735</span>
+new york times <span style="color:#ae81ff">2034</span>
+donald trump realdonaldtrump <span style="color:#ae81ff">1790</span>
+reuters president donald <span style="color:#ae81ff">1476</span>
+black lives matter <span style="color:#ae81ff">1436</span>
+president united states <span style="color:#ae81ff">1096</span>
+white house said <span style="color:#ae81ff">1050</span>
+presidentelect donald trump <span style="color:#ae81ff">1043</span>
+new york city <span style="color:#ae81ff">1006</span>
+president vladimir putin <span style="color:#ae81ff">955</span>
+news century wire <span style="color:#ae81ff">951</span>
+national security adviser <span style="color:#ae81ff">898</span>
+affordable care act <span style="color:#ae81ff">868</span>
+director james comey <span style="color:#ae81ff">860</span>
+speaker paul ryan <span style="color:#ae81ff">851</span>
+fbi director james <span style="color:#ae81ff">778</span>
+state rex tillerson <span style="color:#ae81ff">775</span>
+secretary state rex <span style="color:#ae81ff">765</span>
+russian president vladimir <span style="color:#ae81ff">745</span>
+</code></pre></div><p><img class="img-fluid" src="https://img-blog.csdnimg.cn/20210227122651598.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3MTk3ODgz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"  loading="lazy" />
+
+发现：</p>
+<ul>
+<li>在弗洛伊德（Floyd）死后，有一个重要的新闻裁定美国媒体的“黑人生命问题”。</li>
+<li>我们可以看到新闻已经覆盖了我们的数据。 关于死亡的假新闻很多。</li>
+<li>其余新闻都与美国政治有关</li>
+</ul>
+<h2 id="虚假和真实新闻词云">虚假和真实新闻词云</h2>
+<p>虚假和真实新闻词云 让我们看看假新闻和真实新闻这两个词云.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">text <span style="color:#f92672">=</span> fake_news[<span style="color:#e6db74">&#34;news&#34;</span>]
+wordcloud <span style="color:#f92672">=</span> WordCloud(
+    width <span style="color:#f92672">=</span> <span style="color:#ae81ff">3000</span>,
+    height <span style="color:#f92672">=</span> <span style="color:#ae81ff">2000</span>,
+    background_color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;black&#39;</span>,
+    stopwords <span style="color:#f92672">=</span> STOPWORDS)<span style="color:#f92672">.</span>generate(str(text))
+fig <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>figure(
+    figsize <span style="color:#f92672">=</span> (<span style="color:#ae81ff">40</span>, <span style="color:#ae81ff">30</span>),
+    facecolor <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;k&#39;</span>,
+    edgecolor <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;k&#39;</span>)
+plt<span style="color:#f92672">.</span>imshow(wordcloud, interpolation <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;bilinear&#39;</span>)
+plt<span style="color:#f92672">.</span>axis(<span style="color:#e6db74">&#39;off&#39;</span>)
+plt<span style="color:#f92672">.</span>tight_layout(pad<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+plt<span style="color:#f92672">.</span>show()
+</code></pre></div><p><img class="img-fluid" src="https://img-blog.csdnimg.cn/20210227122750818.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3MTk3ODgz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"  loading="lazy" />
+
+发现</p>
+<ul>
+<li>大多数虚假新闻都围绕唐纳德·特朗普和美国</li>
+<li>还有关于隐私，互联网等的虚假新闻</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">text <span style="color:#f92672">=</span> true_news[<span style="color:#e6db74">&#34;news&#34;</span>]
+wordcloud <span style="color:#f92672">=</span> WordCloud(
+    width <span style="color:#f92672">=</span> <span style="color:#ae81ff">3000</span>,
+    height <span style="color:#f92672">=</span> <span style="color:#ae81ff">2000</span>,
+    background_color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;black&#39;</span>,
+    stopwords <span style="color:#f92672">=</span> STOPWORDS)<span style="color:#f92672">.</span>generate(str(text))
+fig <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>figure(
+    figsize <span style="color:#f92672">=</span> (<span style="color:#ae81ff">40</span>, <span style="color:#ae81ff">30</span>),
+    facecolor <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;k&#39;</span>,
+    edgecolor <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;k&#39;</span>)
+plt<span style="color:#f92672">.</span>imshow(wordcloud, interpolation <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;bilinear&#39;</span>)
+plt<span style="color:#f92672">.</span>axis(<span style="color:#e6db74">&#39;off&#39;</span>)
+plt<span style="color:#f92672">.</span>tight_layout(pad<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+plt<span style="color:#f92672">.</span>show()
+</code></pre></div><p><img class="img-fluid" src="https://img-blog.csdnimg.cn/20210227122833827.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3MTk3ODgz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"  loading="lazy" />
+
+发现：</p>
+<ul>
+<li>真正的新闻对共和党和俄罗斯并没有多大的帮助</li>
+<li>有关于预算案的消息，军事消息也受到政府的消息报道</li>
+</ul>
+<h2 id="时间序列分析-虚假真实新闻">时间序列分析-虚假/真实新闻</h2>
+<p>让我们看一下在媒体上传播的真假新闻的时间表。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 创建时间的数量统计</span>
+fake<span style="color:#f92672">=</span>fake_news<span style="color:#f92672">.</span>groupby([<span style="color:#e6db74">&#39;date&#39;</span>])[<span style="color:#e6db74">&#39;output&#39;</span>]<span style="color:#f92672">.</span>count()
+fake<span style="color:#f92672">=</span>pd<span style="color:#f92672">.</span>DataFrame(fake)
+true<span style="color:#f92672">=</span>true_news<span style="color:#f92672">.</span>groupby([<span style="color:#e6db74">&#39;date&#39;</span>])[<span style="color:#e6db74">&#39;output&#39;</span>]<span style="color:#f92672">.</span>count()
+true<span style="color:#f92672">=</span>pd<span style="color:#f92672">.</span>DataFrame(true)
+<span style="color:#75715e">#Plotting the time series graph</span>
+fig <span style="color:#f92672">=</span> go<span style="color:#f92672">.</span>Figure()
+fig<span style="color:#f92672">.</span>add_trace(go<span style="color:#f92672">.</span>Scatter(
+         x<span style="color:#f92672">=</span>true<span style="color:#f92672">.</span>index,
+         y<span style="color:#f92672">=</span>true[<span style="color:#e6db74">&#39;output&#39;</span>],
+         name<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;True&#39;</span>,
+    line<span style="color:#f92672">=</span>dict(color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;blue&#39;</span>),
+    opacity<span style="color:#f92672">=</span><span style="color:#ae81ff">0.8</span>))
+fig<span style="color:#f92672">.</span>add_trace(go<span style="color:#f92672">.</span>Scatter(
+         x<span style="color:#f92672">=</span>fake<span style="color:#f92672">.</span>index,
+         y<span style="color:#f92672">=</span>fake[<span style="color:#e6db74">&#39;output&#39;</span>],
+         name<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Fake&#39;</span>,
+    line<span style="color:#f92672">=</span>dict(color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;red&#39;</span>),
+    opacity<span style="color:#f92672">=</span><span style="color:#ae81ff">0.8</span>))
+fig<span style="color:#f92672">.</span>update_xaxes(
+    rangeslider_visible<span style="color:#f92672">=</span>True,
+    rangeselector<span style="color:#f92672">=</span>dict(
+        buttons<span style="color:#f92672">=</span>list([
+            dict(count<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1m&#34;</span>, step<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;month&#34;</span>, stepmode<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;backward&#34;</span>),
+            dict(count<span style="color:#f92672">=</span><span style="color:#ae81ff">6</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;6m&#34;</span>, step<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;month&#34;</span>, stepmode<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;backward&#34;</span>),
+            dict(count<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;YTD&#34;</span>, step<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;year&#34;</span>, stepmode<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;todate&#34;</span>),
+            dict(count<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1y&#34;</span>, step<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;year&#34;</span>, stepmode<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;backward&#34;</span>),
+            dict(step<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;all&#34;</span>)
+        ])
+    )
+)
+        
+    
+fig<span style="color:#f92672">.</span>update_layout(title_text<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;True and Fake News&#39;</span>,plot_bgcolor<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;rgb(248, 248, 255)&#39;</span>,yaxis_title<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Value&#39;</span>)
+fig<span style="color:#f92672">.</span>show()
+</code></pre></div><p><img class="img-fluid" src="https://img-blog.csdnimg.cn/20210227122937191.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3MTk3ODgz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"  loading="lazy" />
+
+发现：</p>
+<ul>
+<li>自2017年8月以来，真正的新闻就占据了主导地位。因为它们的出现率很高。这是一个好兆头</li>
+<li>真实消息中的异常值高于虚假消息的异常值很少（2016年11月9日和2017年4月7日）</li>
+<li>我们的数据集包含的假新闻比真实新闻多，因为我们可以看到我们没有整个2015年的真实新闻数据，因此，假新闻分类将比对真实新闻进行分类更为准确</li>
+</ul>
+<h2 id="stemming--vectorizing">Stemming &amp; Vectorizing</h2>
+<p>词干化新闻</p>
+<p>词干提取是从变形词中得出词根的一种方法。 在这里，我们提取评论并将评论中的单词转换为其根词。 例如，</p>
+<ul>
+<li>Going-&gt;go</li>
+<li>Finally-&gt;fina
+如果您注意到，则词根无需带有语义。 还有另一种称为“词法化”的技术，它可以将单词转换为具有语义含义的词根。</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">news_features<span style="color:#f92672">=</span>clean_news<span style="color:#f92672">.</span>copy()
+news_features<span style="color:#f92672">=</span>news_features[[<span style="color:#e6db74">&#39;news&#39;</span>]]<span style="color:#f92672">.</span>reset_index(drop<span style="color:#f92672">=</span>True)
+news_features<span style="color:#f92672">.</span>head()
+Out[<span style="color:#ae81ff">31</span>]:
+
+
+news
+<span style="color:#ae81ff">0</span>	donald trump sends embarrassing new year<span style="color:#960050;background-color:#1e0010">’</span>s eve<span style="color:#f92672">...</span>
+<span style="color:#ae81ff">1</span>	drunk bragging trump staffer started russian c<span style="color:#f92672">...</span>
+<span style="color:#ae81ff">2</span>	sheriff david clarke becomes internet joke thr<span style="color:#f92672">...</span>
+<span style="color:#ae81ff">3</span>	trump obsessed even obama<span style="color:#960050;background-color:#1e0010">’</span>s name coded website<span style="color:#f92672">...</span>
+<span style="color:#ae81ff">4</span>	pope francis called donald trump christmas spe<span style="color:#f92672">...</span>
+In [<span style="color:#ae81ff">32</span>]:
+
+
+
+stop_words <span style="color:#f92672">=</span> set(stopwords<span style="color:#f92672">.</span>words(<span style="color:#e6db74">&#34;english&#34;</span>))
+<span style="color:#75715e"># 词干化</span>
+ps <span style="color:#f92672">=</span> PorterStemmer()
+<span style="color:#75715e"># 分词然后词干化</span>
+corpus <span style="color:#f92672">=</span> []
+<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>, len(news_features)):
+    news <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>sub(<span style="color:#e6db74">&#39;[^a-zA-Z]&#39;</span>, <span style="color:#e6db74">&#39; &#39;</span>, news_features[<span style="color:#e6db74">&#39;news&#39;</span>][i])
+    news<span style="color:#f92672">=</span> news<span style="color:#f92672">.</span>lower()
+    news <span style="color:#f92672">=</span> news<span style="color:#f92672">.</span>split()
+    news <span style="color:#f92672">=</span> [ps<span style="color:#f92672">.</span>stem(word) <span style="color:#66d9ef">for</span> word <span style="color:#f92672">in</span> news <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> word <span style="color:#f92672">in</span> stop_words]
+    news <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39; &#39;</span><span style="color:#f92672">.</span>join(news)
+    corpus<span style="color:#f92672">.</span>append(news)   
+In [<span style="color:#ae81ff">33</span>]:
+
+
+
+corpus[<span style="color:#ae81ff">1</span>]
+Out[<span style="color:#ae81ff">33</span>]:
+
+<span style="color:#e6db74">&#39;drunk brag trump staffer start russian collus investigationhous intellig committe chairman devin nune go bad day assumpt like mani us christoph steeledossi prompt russia investig lash depart justic fbi order protect trump happen dossier start investig accord document obtain new york timesform trump campaign advis georg papadopoulo drunk wine bar reveal knowledg russian opposit research hillari clintonon top papadopoulo covfef boy trump administr alleg much larger role none damn drunken fool wine bar coffe boy help arrang new york meet trump presid abdel fattah elsisi egypt two month elect known former aid set meet world leader trump team trump ran mere coffe boyin may papadopoulo reveal australian diplomat alexand downer russian offici shop around possibl dirt thendemocrat presidenti nomine hillari clinton exactli much mr papadopoulo said night kensington wine room australian alexand downer unclear report state two month later leak democrat email began appear onlin australian offici pass inform mr papadopoulo american counterpart accord four current former american foreign offici direct knowledg australian role papadopoulo plead guilti lie fbi cooper wit special counsel robert mueller teamthi presid badli script realiti tv showphoto win mcnameegetti imag&#39;</span>
+</code></pre></div><p>这是现在的样子，因为计算机无法理解单词及其词义，我们需要将这些单词转换为1和0。为了对其进行编码，我们使用TFIDF。</p>
+<h2 id="tfidfterm-frequency--inverse-document-frequency">TFIDF(Term Frequency — Inverse Document Frequency)</h2>
+<p>TF-IDF代表“词语频率-反向文档频率”。 这是一种量化文档中单词的技术，我们通常计算每个单词的权重，表示该单词在文档和语料库中的重要性。 此方法是信息检索和文本挖掘中广泛使用的技术。</p>
+<p>在这里，我们将bigram（两个单词）分开并考虑它们的总权重，而且我们只从新闻中提取前5000个单词。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">tfidf_vectorizer <span style="color:#f92672">=</span> TfidfVectorizer(max_features<span style="color:#f92672">=</span><span style="color:#ae81ff">5000</span>,ngram_range<span style="color:#f92672">=</span>(<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">2</span>))
+<span style="color:#75715e"># TFIDF矩阵</span>
+X<span style="color:#f92672">=</span> tfidf_vectorizer<span style="color:#f92672">.</span>fit_transform(news_features[<span style="color:#e6db74">&#39;news&#39;</span>])
+X<span style="color:#f92672">.</span>shape
+Out[<span style="color:#ae81ff">34</span>]:
+
+(<span style="color:#ae81ff">44888</span>, <span style="color:#ae81ff">5000</span>)
+In [<span style="color:#ae81ff">35</span>]:
+
+
+
+<span style="color:#75715e">#目标列</span>
+y<span style="color:#f92672">=</span>clean_news[<span style="color:#e6db74">&#39;output&#39;</span>]
+In [<span style="color:#ae81ff">36</span>]:
+
+
+
+<span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#39;Original dataset shape : {Counter(y)}&#39;</span>)
+Original dataset shape : Counter({<span style="color:#ae81ff">0</span>: <span style="color:#ae81ff">23471</span>, <span style="color:#ae81ff">1</span>: <span style="color:#ae81ff">21417</span>})
+In [<span style="color:#ae81ff">37</span>]:
+
+
+
+<span style="color:#75715e">## 创建train或者test</span>
+X_train, X_test, y_train, y_test <span style="color:#f92672">=</span> train_test_split(X, y, test_size<span style="color:#f92672">=</span><span style="color:#ae81ff">0.25</span>, random_state<span style="color:#f92672">=</span>
+</code></pre></div><h2 id="模型构建logistics-regression-假新闻分类器">模型构建：Logistics Regression 假新闻分类器</h2>
+<p>因为我们已经成功处理了文本数据，所以这不仅仅是正常的机器学习问题。我们从稀疏矩阵中预测目标特征中的类。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">plot_confusion_matrix</span>(cm, classes,
+                          normalize<span style="color:#f92672">=</span>False,
+                          title<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Confusion matrix&#39;</span>,
+                          cmap<span style="color:#f92672">=</span>plt<span style="color:#f92672">.</span>cm<span style="color:#f92672">.</span>Blues):
+    <span style="color:#e6db74">&#34;&#34;&#34;
+</span><span style="color:#e6db74">    This function prints and plots the confusion matrix.
+</span><span style="color:#e6db74">    Normalization can be applied by setting `normalize=True`.
+</span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
+    
+    plt<span style="color:#f92672">.</span>imshow(cm, interpolation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nearest&#39;</span>, cmap<span style="color:#f92672">=</span>cmap)
+    plt<span style="color:#f92672">.</span>title(title)
+    plt<span style="color:#f92672">.</span>colorbar()
+    tick_marks <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(len(classes))
+    plt<span style="color:#f92672">.</span>xticks(tick_marks, classes, rotation<span style="color:#f92672">=</span><span style="color:#ae81ff">45</span>)
+    plt<span style="color:#f92672">.</span>yticks(tick_marks, classes)
+    <span style="color:#66d9ef">if</span> normalize:
+        cm <span style="color:#f92672">=</span> cm<span style="color:#f92672">.</span>astype(<span style="color:#e6db74">&#39;float&#39;</span>) <span style="color:#f92672">/</span> cm<span style="color:#f92672">.</span>sum(axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)[:, np<span style="color:#f92672">.</span>newaxis]
+        <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Normalized confusion matrix&#34;</span>)
+    <span style="color:#66d9ef">else</span>:
+        <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;Confusion matrix, without normalization&#39;</span>)
+    thresh <span style="color:#f92672">=</span> cm<span style="color:#f92672">.</span>max() <span style="color:#f92672">/</span> <span style="color:#ae81ff">2.</span>
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range (cm<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>]):
+        <span style="color:#66d9ef">for</span> j <span style="color:#f92672">in</span> range (cm<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">1</span>]):
+            plt<span style="color:#f92672">.</span>text(j, i, cm[i, j],
+                 horizontalalignment<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;center&#34;</span>,
+                 color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;white&#34;</span> <span style="color:#66d9ef">if</span> cm[i, j] <span style="color:#f92672">&gt;</span> thresh <span style="color:#66d9ef">else</span> <span style="color:#e6db74">&#34;black&#34;</span>)
+    plt<span style="color:#f92672">.</span>tight_layout()
+    plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;True label&#39;</span>)
+    plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;Predicted label&#39;</span>)
+</code></pre></div><h4 id="模型选择">模型选择</h4>
+<p>首先使用交叉验证选择最佳的成型模型。 让我们考虑所有分类算法并执行模型选择过程
+注意：我没有在此算法中包含SVM，因为在设备中进行培训需要花费很多时间</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 创建分类器</span>
+logreg_cv <span style="color:#f92672">=</span> LogisticRegression(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+dt_cv<span style="color:#f92672">=</span>DecisionTreeClassifier()
+knn_cv<span style="color:#f92672">=</span>KNeighborsClassifier()
+nb_cv<span style="color:#f92672">=</span>MultinomialNB(alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.1</span>) 
+cv_dict <span style="color:#f92672">=</span> {<span style="color:#ae81ff">0</span>: <span style="color:#e6db74">&#39;Logistic Regression&#39;</span>, <span style="color:#ae81ff">1</span>: <span style="color:#e6db74">&#39;Decision Tree&#39;</span>,<span style="color:#ae81ff">2</span>:<span style="color:#e6db74">&#39;KNN&#39;</span>,<span style="color:#ae81ff">3</span>:<span style="color:#e6db74">&#39;Naive Bayes&#39;</span>}
+cv_models<span style="color:#f92672">=</span>[logreg_cv,dt_cv,knn_cv,nb_cv]
+<span style="color:#75715e"># 准确率</span>
+<span style="color:#66d9ef">for</span> i,model <span style="color:#f92672">in</span> enumerate(cv_models):
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;{} Test Accuracy: {}&#34;</span><span style="color:#f92672">.</span>format(cv_dict[i],cross_val_score(model, X, y, cv<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, scoring <span style="color:#f92672">=</span><span style="color:#e6db74">&#39;accuracy&#39;</span>)<span style="color:#f92672">.</span>mean()))
+Logistic Regression Test Accuracy: <span style="color:#ae81ff">0.9660040199274997</span>
+Decision Tree Test Accuracy: <span style="color:#ae81ff">0.9347925003047657</span>
+KNN Test Accuracy: <span style="color:#ae81ff">0.613172841991654</span>
+Naive Bayes Test Accuracy: <span style="color:#ae81ff">0.9373328405462511</span>
+</code></pre></div><h4 id="参数调整">参数调整</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">param_grid <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#39;C&#39;</span>: np<span style="color:#f92672">.</span>logspace(<span style="color:#f92672">-</span><span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">50</span>),
+             <span style="color:#e6db74">&#39;penalty&#39;</span>:[<span style="color:#e6db74">&#39;l1&#39;</span>, <span style="color:#e6db74">&#39;l2&#39;</span>]}
+clf <span style="color:#f92672">=</span> GridSearchCV(LogisticRegression(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>), param_grid,cv<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>, verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>,n_jobs<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>)
+best_model <span style="color:#f92672">=</span> clf<span style="color:#f92672">.</span>fit(X_train,y_train)
+<span style="color:#66d9ef">print</span>(best_model<span style="color:#f92672">.</span>best_estimator_)
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;The mean accuracy of the model is:&#34;</span>,best_model<span style="color:#f92672">.</span>score(X_test,y_test))
+LogisticRegression(C<span style="color:#f92672">=</span><span style="color:#ae81ff">24.420530945486497</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+The mean accuracy of the model <span style="color:#f92672">is</span>: <span style="color:#ae81ff">0.9803065407235787</span>
+In [<span style="color:#ae81ff">42</span>]:
+
+
+
+logreg <span style="color:#f92672">=</span> LogisticRegression(C<span style="color:#f92672">=</span><span style="color:#ae81ff">24.420530945486497</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+logreg<span style="color:#f92672">.</span>fit(X_train, y_train)
+y_pred <span style="color:#f92672">=</span> logreg<span style="color:#f92672">.</span>predict(X_test)
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;Accuracy of logistic regression classifier on test set: {:.2f}&#39;</span><span style="color:#f92672">.</span>format(logreg<span style="color:#f92672">.</span>score(X_test, y_test)))
+Accuracy of logistic regression classifier on test set: <span style="color:#ae81ff">0.98</span>
+</code></pre></div><h4 id="混淆矩阵">混淆矩阵</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">cm <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>confusion_matrix(y_test, y_pred)
+plot_confusion_matrix(cm, classes<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;Fake&#39;</span>,<span style="color:#e6db74">&#39;True&#39;</span>])
+Confusion matrix, without normalization
+</code></pre></div><p><img class="img-fluid" src="https://img-blog.csdnimg.cn/20210227123316869.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3MTk3ODgz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"  loading="lazy" />
+</p>
+<h4 id="分类报告">分类报告</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Classification Report:</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>,classification_report(y_test, y_pred))
+Classification Report:
+               precision    recall  f1<span style="color:#f92672">-</span>score   support
+
+           <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0.98</span>      <span style="color:#ae81ff">0.98</span>      <span style="color:#ae81ff">0.98</span>      <span style="color:#ae81ff">5892</span>
+           <span style="color:#ae81ff">1</span>       <span style="color:#ae81ff">0.98</span>      <span style="color:#ae81ff">0.98</span>      <span style="color:#ae81ff">0.98</span>      <span style="color:#ae81ff">5330</span>
+
+    accuracy                           <span style="color:#ae81ff">0.98</span>     <span style="color:#ae81ff">11222</span>
+   macro avg       <span style="color:#ae81ff">0.98</span>      <span style="color:#ae81ff">0.98</span>      <span style="color:#ae81ff">0.98</span>     <span style="color:#ae81ff">11222</span>
+weighted avg       <span style="color:#ae81ff">0.98</span>      <span style="color:#ae81ff">0.98</span>      <span style="color:#ae81ff">0.98</span>     <span style="color:#ae81ff">11222</span>
+</code></pre></div><h4 id="roc-auc-curve">ROC-AUC Curve</h4>
+<p>这是一条非常重要的曲线，我们可以根据客观标准来决定要设置的阈值。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">logit_roc_auc <span style="color:#f92672">=</span> roc_auc_score(y_test, logreg<span style="color:#f92672">.</span>predict(X_test))
+fpr, tpr, thresholds <span style="color:#f92672">=</span> roc_curve(y_test, logreg<span style="color:#f92672">.</span>predict_proba(X_test)[:,<span style="color:#ae81ff">1</span>])
+plt<span style="color:#f92672">.</span>figure()
+plt<span style="color:#f92672">.</span>plot(fpr, tpr, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Logistic Regression (area = </span><span style="color:#e6db74">%0.2f</span><span style="color:#e6db74">)&#39;</span> <span style="color:#f92672">%</span> logit_roc_auc)
+plt<span style="color:#f92672">.</span>plot([<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>], [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>],<span style="color:#e6db74">&#39;r--&#39;</span>)
+plt<span style="color:#f92672">.</span>xlim([<span style="color:#f92672">-</span><span style="color:#ae81ff">0.01</span>, <span style="color:#ae81ff">1.0</span>])
+plt<span style="color:#f92672">.</span>ylim([<span style="color:#ae81ff">0.0</span>, <span style="color:#ae81ff">1.05</span>])
+plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;False Positive Rate&#39;</span>)
+plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;True Positive Rate&#39;</span>)
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#39;Receiver operating characteristic&#39;</span>)
+plt<span style="color:#f92672">.</span>legend(loc<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;lower right&#34;</span>)
+plt<span style="color:#f92672">.</span>show()
+</code></pre></div><p><img class="img-fluid" src="https://img-blog.csdnimg.cn/20210227123410202.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3MTk3ODgz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"  loading="lazy" />
+</p>
+<h2 id="深度学习模型-lstm">深度学习模型-LSTM</h2>
+<p>在本部分中，我们使用神经网络来预测给定新闻是否为假新闻。</p>
+<p>我们不会使用像ANN这样的普通神经网络来分类，而是使用LSTM（长期短期记忆）来帮助包含序列信息。长期短期记忆（LSTM）网络是一种能够学习序列依赖的递归神经网络。 序列预测问题。 这是机器翻译，语音识别等复杂问题域中所需的行为。</p>
+<h4 id="嵌入层-one-hot编码">嵌入层-One Hot编码</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 词汇表大小</span>
+voc_size<span style="color:#f92672">=</span><span style="color:#ae81ff">10000</span>
+<span style="color:#75715e">#One hot 编码</span>
+onehot_repr<span style="color:#f92672">=</span>[one_hot(words,voc_size)<span style="color:#66d9ef">for</span> words <span style="color:#f92672">in</span> corpus] 
+</code></pre></div><h4 id="对齐序列">对齐序列</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">clean_news[<span style="color:#e6db74">&#39;word_count&#39;</span>]<span style="color:#f92672">.</span>describe()
+Out[<span style="color:#ae81ff">49</span>]:
+
+count    <span style="color:#ae81ff">44888.000000</span>
+mean       <span style="color:#ae81ff">237.051907</span>
+std        <span style="color:#ae81ff">198.796232</span>
+min          <span style="color:#ae81ff">3.000000</span>
+<span style="color:#ae81ff">25</span><span style="color:#f92672">%</span>        <span style="color:#ae81ff">124.000000</span>
+<span style="color:#ae81ff">50</span><span style="color:#f92672">%</span>        <span style="color:#ae81ff">210.000000</span>
+<span style="color:#ae81ff">75</span><span style="color:#f92672">%</span>        <span style="color:#ae81ff">294.000000</span>
+max       <span style="color:#ae81ff">4831.000000</span>
+Name: word_count, dtype: float64
+In [<span style="color:#ae81ff">50</span>]:
+
+
+
+<span style="color:#75715e"># 设置序列长度</span>
+sent_length<span style="color:#f92672">=</span><span style="color:#ae81ff">5000</span>
+<span style="color:#75715e"># 补齐</span>
+embedded_docs<span style="color:#f92672">=</span>pad_sequences(onehot_repr,padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;pre&#39;</span>,maxlen<span style="color:#f92672">=</span>sent_length)
+<span style="color:#66d9ef">print</span>(embedded_docs)
+[[   <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">0</span> <span style="color:#f92672">...</span> <span style="color:#ae81ff">3061</span> <span style="color:#ae81ff">6048</span> <span style="color:#ae81ff">7061</span>]
+ [   <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">0</span> <span style="color:#f92672">...</span> <span style="color:#ae81ff">5721</span> <span style="color:#ae81ff">4842</span> <span style="color:#ae81ff">7061</span>]
+ [   <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">0</span> <span style="color:#f92672">...</span> <span style="color:#ae81ff">5552</span> <span style="color:#ae81ff">4139</span> <span style="color:#ae81ff">7061</span>]
+ <span style="color:#f92672">...</span>
+ [   <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">0</span> <span style="color:#f92672">...</span> <span style="color:#ae81ff">7960</span> <span style="color:#ae81ff">9583</span> <span style="color:#ae81ff">8051</span>]
+ [   <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">0</span> <span style="color:#f92672">...</span> <span style="color:#ae81ff">5323</span> <span style="color:#ae81ff">5417</span> <span style="color:#ae81ff">3542</span>]
+ [   <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">0</span> <span style="color:#f92672">...</span> <span style="color:#ae81ff">8286</span> <span style="color:#ae81ff">7502</span> <span style="color:#ae81ff">4272</span>]]
+</code></pre></div><h4 id="lstm模型">LSTM模型</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#构建lstm模型</span>
+embedding_vector_features<span style="color:#f92672">=</span><span style="color:#ae81ff">40</span>
+model<span style="color:#f92672">=</span>Sequential()
+model<span style="color:#f92672">.</span>add(Embedding(voc_size,embedding_vector_features,input_length<span style="color:#f92672">=</span>sent_length))
+model<span style="color:#f92672">.</span>add(Dropout(<span style="color:#ae81ff">0.3</span>))
+model<span style="color:#f92672">.</span>add(LSTM(<span style="color:#ae81ff">100</span>)) <span style="color:#75715e"># 100</span>
+model<span style="color:#f92672">.</span>add(Dropout(<span style="color:#ae81ff">0.3</span>))
+model<span style="color:#f92672">.</span>add(Dense(<span style="color:#ae81ff">1</span>,activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sigmoid&#39;</span>))
+<span style="color:#75715e"># 编译模型</span>
+model<span style="color:#f92672">.</span>compile(loss<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;binary_crossentropy&#39;</span>,optimizer<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;adam&#39;</span>,metrics<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;accuracy&#39;</span>])
+<span style="color:#66d9ef">print</span>(model<span style="color:#f92672">.</span>summary())
+Model: <span style="color:#e6db74">&#34;sequential&#34;</span>
+_________________________________________________________________
+Layer (type)                 Output Shape              Param <span style="color:#75715e">#   </span>
+<span style="color:#f92672">=================================================================</span>
+embedding (Embedding)        (None, <span style="color:#ae81ff">5000</span>, <span style="color:#ae81ff">40</span>)          <span style="color:#ae81ff">400000</span>    
+_________________________________________________________________
+dropout (Dropout)            (None, <span style="color:#ae81ff">5000</span>, <span style="color:#ae81ff">40</span>)          <span style="color:#ae81ff">0</span>         
+_________________________________________________________________
+lstm (LSTM)                  (None, <span style="color:#ae81ff">100</span>)               <span style="color:#ae81ff">56400</span>     
+_________________________________________________________________
+dropout_1 (Dropout)          (None, <span style="color:#ae81ff">100</span>)               <span style="color:#ae81ff">0</span>         
+_________________________________________________________________
+dense (Dense)                (None, <span style="color:#ae81ff">1</span>)                 <span style="color:#ae81ff">101</span>       
+<span style="color:#f92672">=================================================================</span>
+Total params: <span style="color:#ae81ff">456</span>,<span style="color:#ae81ff">501</span>
+Trainable params: <span style="color:#ae81ff">456</span>,<span style="color:#ae81ff">501</span>
+Non<span style="color:#f92672">-</span>trainable params: <span style="color:#ae81ff">0</span>
+_________________________________________________________________
+None
+In [<span style="color:#ae81ff">52</span>]:
+
+
+
+len(embedded_docs),y<span style="color:#f92672">.</span>shape
+Out[<span style="color:#ae81ff">52</span>]:
+
+(<span style="color:#ae81ff">44888</span>, (<span style="color:#ae81ff">44888</span>,))
+</code></pre></div><h4 id="模型训练">模型训练</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 转换X和y</span>
+X_final<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>array(embedded_docs)
+y_final<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>array(y)
+<span style="color:#75715e"># X和y大小</span>
+X_final<span style="color:#f92672">.</span>shape,y_final<span style="color:#f92672">.</span>shape
+Out[<span style="color:#ae81ff">53</span>]:
+
+((<span style="color:#ae81ff">44888</span>, <span style="color:#ae81ff">5000</span>), (<span style="color:#ae81ff">44888</span>,))
+In [<span style="color:#f92672">*</span>]:
+
+
+
+<span style="color:#75715e"># 划分训练集和测试集</span>
+X_train, X_test, y_train, y_test <span style="color:#f92672">=</span> train_test_split(X_final, y_final, test_size<span style="color:#f92672">=</span><span style="color:#ae81ff">0.33</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">42</span>)
+<span style="color:#75715e"># epochs设置为10 batch size大小为64</span>
+model<span style="color:#f92672">.</span>fit(X_train,y_train,validation_data<span style="color:#f92672">=</span>(X_test,y_test),epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>,batch_size<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span>)
+Epoch <span style="color:#ae81ff">1</span><span style="color:#f92672">/</span><span style="color:#ae81ff">10</span>
+
+<span style="color:#ae81ff">470</span><span style="color:#f92672">/</span><span style="color:#ae81ff">470</span> [<span style="color:#f92672">==============================</span>] <span style="color:#f92672">-</span> <span style="color:#ae81ff">125</span>s <span style="color:#ae81ff">267</span>ms<span style="color:#f92672">/</span>step <span style="color:#f92672">-</span> loss: <span style="color:#ae81ff">0.2214</span> <span style="color:#f92672">-</span> accuracy: <span style="color:#ae81ff">0.9109</span> <span style="color:#f92672">-</span> val_loss: <span style="color:#ae81ff">0.0735</span> <span style="color:#f92672">-</span> val_accuracy: <span style="color:#ae81ff">0.9768</span>
+Epoch <span style="color:#ae81ff">2</span><span style="color:#f92672">/</span><span style="color:#ae81ff">10</span>
+<span style="color:#ae81ff">470</span><span style="color:#f92672">/</span><span style="color:#ae81ff">470</span> [<span style="color:#f92672">==============================</span>] <span style="color:#f92672">-</span> <span style="color:#ae81ff">126</span>s <span style="color:#ae81ff">269</span>ms<span style="color:#f92672">/</span>step <span style="color:#f92672">-</span> loss: <span style="color:#ae81ff">0.0750</span> <span style="color:#f92672">-</span> accuracy: <span style="color:#ae81ff">0.9764</span> <span style="color:#f92672">-</span> val_loss: <span style="color:#ae81ff">0.0686</span> <span style="color:#f92672">-</span> val_accuracy: <span style="color:#ae81ff">0.9820</span>
+Epoch <span style="color:#ae81ff">3</span><span style="color:#f92672">/</span><span style="color:#ae81ff">10</span>
+<span style="color:#ae81ff">470</span><span style="color:#f92672">/</span><span style="color:#ae81ff">470</span> [<span style="color:#f92672">==============================</span>] <span style="color:#f92672">-</span> <span style="color:#ae81ff">126</span>s <span style="color:#ae81ff">268</span>ms<span style="color:#f92672">/</span>step <span style="color:#f92672">-</span> loss: <span style="color:#ae81ff">0.0538</span> <span style="color:#f92672">-</span> accuracy: <span style="color:#ae81ff">0.9837</span> <span style="color:#f92672">-</span> val_loss: <span style="color:#ae81ff">0.0550</span> <span style="color:#f92672">-</span> val_accuracy: <span style="color:#ae81ff">0.9849</span>
+Epoch <span style="color:#ae81ff">4</span><span style="color:#f92672">/</span><span style="color:#ae81ff">10</span>
+<span style="color:#ae81ff">303</span><span style="color:#f92672">/</span><span style="color:#ae81ff">470</span> [<span style="color:#f92672">==================&gt;...........</span>] <span style="color:#f92672">-</span> ETA: <span style="color:#ae81ff">38</span>s <span style="color:#f92672">-</span> loss: <span style="color:#ae81ff">0.0404</span> <span style="color:#f92672">-</span> accuracy: <span style="color:#ae81ff">0.9881</span>
+</code></pre></div><h4 id="模型评估">模型评估</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 测试集数据预测</span>
+y_pred<span style="color:#f92672">=</span>model<span style="color:#f92672">.</span>predict_classes(X_test)
+<span style="color:#75715e"># 混淆矩阵</span>
+<span style="color:#75715e"># confusion_matrix(y_test,y_pred)</span>
+cm <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>confusion_matrix(y_test, y_pred)
+plot_confusion_matrix(cm,classes<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;Fake&#39;</span>,<span style="color:#e6db74">&#39;True&#39;</span>])
+</code></pre></div><p><img class="img-fluid" src="https://img-blog.csdnimg.cn/20210227123724269.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3MTk3ODgz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"  loading="lazy" />
+</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">accuracy_score(y_test,y_pred)
+Out[<span style="color:#ae81ff">56</span>]:
+
+<span style="color:#ae81ff">0.9800864047522614</span>
+In [<span style="color:#ae81ff">57</span>]:
+
+
+
+<span style="color:#66d9ef">print</span>(classification_report(y_test,y_pred))
+              precision    recall  f1<span style="color:#f92672">-</span>score   support
+
+           <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0.98</span>      <span style="color:#ae81ff">0.98</span>      <span style="color:#ae81ff">0.98</span>      <span style="color:#ae81ff">7777</span>
+           <span style="color:#ae81ff">1</span>       <span style="color:#ae81ff">0.98</span>      <span style="color:#ae81ff">0.98</span>      <span style="color:#ae81ff">0.98</span>      <span style="color:#ae81ff">7037</span>
+
+    accuracy                           <span style="color:#ae81ff">0.98</span>     <span style="color:#ae81ff">14814</span>
+   macro avg       <span style="color:#ae81ff">0.98</span>      <span style="color:#ae81ff">0.98</span>      <span style="color:#ae81ff">0.98</span>     <span style="color:#ae81ff">14814</span>
+weighted avg       <span style="color:#ae81ff">0.98</span>      <span style="color:#ae81ff">0.98</span>      <span style="color:#ae81ff">0.98</span>     <span style="color:#ae81ff">14814</span>
+</code></pre></div><h2 id="bidirectional-lstm">Bidirectional LSTM</h2>
+<p>Bi-LSTM是标准LSTM的扩展，具有两个独立的RNN。 普通的LSTM是单向的，它无法知道将来的单词，而在Bi-LSTM中，我们可以预测单词的未来使用，因为存在从另一RNN层反向传递的反向信息。</p>
+<p>与LSTM相比，代码只做了一个更改，这里我们使用Bidirectional（）函数并在内部调用LSTM。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">embedding_vector_features<span style="color:#f92672">=</span><span style="color:#ae81ff">40</span>
+model1<span style="color:#f92672">=</span>Sequential()
+model1<span style="color:#f92672">.</span>add(Embedding(voc_size,embedding_vector_features,input_length<span style="color:#f92672">=</span>sent_length))
+model1<span style="color:#f92672">.</span>add(Bidirectional(LSTM(<span style="color:#ae81ff">100</span>))) <span style="color:#75715e"># Bidirectional LSTM layer</span>
+model1<span style="color:#f92672">.</span>add(Dropout(<span style="color:#ae81ff">0.3</span>))
+model1<span style="color:#f92672">.</span>add(Dense(<span style="color:#ae81ff">1</span>,activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sigmoid&#39;</span>))
+model1<span style="color:#f92672">.</span>compile(loss<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;binary_crossentropy&#39;</span>,optimizer<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;adam&#39;</span>,metrics<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;accuracy&#39;</span>])
+<span style="color:#66d9ef">print</span>(model1<span style="color:#f92672">.</span>summary())
+Model: <span style="color:#e6db74">&#34;sequential_1&#34;</span>
+_________________________________________________________________
+Layer (type)                 Output Shape              Param <span style="color:#75715e">#   </span>
+<span style="color:#f92672">=================================================================</span>
+embedding_1 (Embedding)      (None, <span style="color:#ae81ff">5000</span>, <span style="color:#ae81ff">40</span>)          <span style="color:#ae81ff">400000</span>    
+_________________________________________________________________
+bidirectional (Bidirectional (None, <span style="color:#ae81ff">200</span>)               <span style="color:#ae81ff">112800</span>    
+_________________________________________________________________
+dropout_2 (Dropout)          (None, <span style="color:#ae81ff">200</span>)               <span style="color:#ae81ff">0</span>         
+_________________________________________________________________
+dense_1 (Dense)              (None, <span style="color:#ae81ff">1</span>)                 <span style="color:#ae81ff">201</span>       
+<span style="color:#f92672">=================================================================</span>
+Total params: <span style="color:#ae81ff">513</span>,<span style="color:#ae81ff">001</span>
+Trainable params: <span style="color:#ae81ff">513</span>,<span style="color:#ae81ff">001</span>
+Non<span style="color:#f92672">-</span>trainable params: <span style="color:#ae81ff">0</span>
+_________________________________________________________________
+None
+</code></pre></div><h4 id="双向lstm模型的拟合与评估">双向LSTM模型的拟合与评估</h4>
+<p>现在让我们将双向LSTM模型拟合到我们拥有的数据之前具有相同参数的数据上。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 测试集</span>
+y_pred1<span style="color:#f92672">=</span>model1<span style="color:#f92672">.</span>predict_classes(X_test)
+<span style="color:#75715e"># 混淆矩阵</span>
+cm <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>confusion_matrix(y_test, y_pred1)
+plot_confusion_matrix(cm,classes<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;Fake&#39;</span>,<span style="color:#e6db74">&#39;True&#39;</span>])
+</code></pre></div><p><img class="img-fluid" src="https://img-blog.csdnimg.cn/20210227123846598.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3MTk3ODgz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"  loading="lazy" />
+</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">In [<span style="color:#ae81ff">62</span>]:
+
+
+
+<span style="color:#75715e"># 准确率</span>
+accuracy_score(y_test,y_pred1)
+Out[<span style="color:#ae81ff">62</span>]:
+
+<span style="color:#ae81ff">0.615161333873363</span>
+In [<span style="color:#ae81ff">61</span>]:
+
+
+
+<span style="color:#75715e"># 分类报告</span>
+<span style="color:#66d9ef">print</span>(classification_report(y_test,y_pred1))
+              precision    recall  f1<span style="color:#f92672">-</span>score   support
+
+           <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0.61</span>      <span style="color:#ae81ff">0.74</span>      <span style="color:#ae81ff">0.67</span>      <span style="color:#ae81ff">7777</span>
+           <span style="color:#ae81ff">1</span>       <span style="color:#ae81ff">0.62</span>      <span style="color:#ae81ff">0.48</span>      <span style="color:#ae81ff">0.54</span>      <span style="color:#ae81ff">7037</span>
+
+    accuracy                           <span style="color:#ae81ff">0.62</span>     <span style="color:#ae81ff">14814</span>
+   macro avg       <span style="color:#ae81ff">0.62</span>      <span style="color:#ae81ff">0.61</span>      <span style="color:#ae81ff">0.61</span>     <span style="color:#ae81ff">14814</span>
+weighted avg       <span style="color:#ae81ff">0.62</span>      <span style="color:#ae81ff">0.62</span>      <span style="color:#ae81ff">0.61</span>     <span style="color:#ae81ff">14814</span>
+</code></pre></div><h2 id="结论">结论</h2>
+<p>我们已经在处理数据和构建模型方面进行了主流工作。 我们本可以在向量化文本数据的同时沉迷于更改ngram。 我们拿了2个字并将其向量化。 您可以通过同时考虑1和2个单词来检查Shreta在同一数据集上的工作，她在LSTM和Bi-LSTM网络的帮助下获得了更好的结果。让我们讨论数据集的一般见解。</p>
+<p>大多数虚假新闻都被选举新闻和特朗普所包围。 考虑到2020年美国大选。有传播假新闻的机会，将非常需要这些技术的应用。 假新闻目前在这种大流行情况中根深蒂固，以打政治，恐吓人们并强迫他们购买商品 大多数新闻来自路透社。 我们不知道这种新闻媒体是否受到政治影响。 因此，我们应始终考虑新闻来源，以查找新闻是虚假还是真实。</p>
+<p>最后欢迎大家关注我们的公众号：ChallengeHub，加入ChallengeHub粉丝群，共同探讨，共同学习，共同进步！！！
+<img class="img-fluid" src="https://img-blog.csdnimg.cn/20210227115159513.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3MTk3ODgz,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"  loading="lazy" />
+
+<img class="img-fluid" src="https://img-blog.csdnimg.cn/202102271152448.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3MTk3ODgz,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"  loading="lazy" />
+</p>
+</div><div class="post-copyright mb-4">
+  <h3>版权</h3><div class="post-cc">本作品采用 <a target="_blank" rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh">CC BY-NC-ND 4.0 <i class="fab fa-fw fa-creative-commons"></i><i class="fab fa-fw fa-creative-commons-by"></i><i class="fab fa-fw fa-creative-commons-nc"></i><i class="fab fa-fw fa-creative-commons-nd"></i></a> 授权。</div>
+</div><div class="post-reward mb-4 text-center">
+  <button type="button" class="btn btn-reward" data-toggle="modal" data-target="#rewardModal">
+    <i class="fas fa-fw fa-medal"></i>打赏
+  </button>
+</div><div class="modal fade" id="rewardModal" tabindex="-1" aria-labelledby="rewardModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content surface">
+      <div class="modal-header">
+        <h5 class="modal-title" id="rewardModalLabel"><i class="fas fa-fw fa-medal"></i>打赏</h5>
+        <a href="#" data-dismiss="modal" aria-label="Close"><i class="fas fa-fw fa-times"></i></a>
+      </div>
+      <div class="modal-body">
+        <ul class="nav nav-tabs mb-3" role="tablist"><li class="nav-item" role="presentation">
+            <a class="nav-link active" id="reward-alipay-tab" data-toggle="tab" href="#reward-alipay" role="tab" aria-controls="reward-alipay" aria-selected="true">
+              <i class="fab fa-fw fa-alipay"></i>支付宝
+            </a>
+          </li><li class="nav-item" role="presentation">
+            <a class="nav-link" id="reward-wechat-tab" data-toggle="tab" href="#reward-wechat" role="tab" aria-controls="reward-wechat" aria-selected="true">
+              <i class="fab fa-fw fa-weixin"></i>微信
+            </a>
+          </li></ul>
+        <div class="tab-content" id="rewardTabContent"><div class="tab-pane fade post-reward-content show active" id="reward-alipay" role="tabpanel" aria-labelledby="reward-alipay-tab">
+            <img class="img-fluid post-reward-img" src="/images/reward/alipay.webp" loading="lazy" />
+          </div><div class="tab-pane fade post-reward-content show" id="reward-wechat" role="tabpanel" aria-labelledby="reward-wechat-tab">
+            <img class="img-fluid post-reward-img" src="/images/reward/wechat.webp" loading="lazy" />
+          </div></div>
+      </div>
+    </div>
+  </div>
+</div><div class="post-navs d-flex mb-3 justify-content-between">
+  <div class="post-nav w-50"><div class="prev-post">
+      <a href="/posts/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C03-node-embeddings/">图神经网络（03）-Node Embeddings</a>
+    </div></div>
+  <div class="post-nav flex-row-reverse"><div class="next-post">
+      <a href="/posts/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C04-graph-ml/">图神经网络(04)-基于Graph的传统机器学习方法</a>
+    </div></div>
+</div></article><div class="post-comments surface row"><script src="https://utteranc.es/client.js"
+  repo="razonyang/hugo-theme-bootstrap"
+  issue-term="pathname"
+  label=""
+  theme="github-dark"
+  crossorigin="anonymous"
+  async>
+</script></div></div>
+</div><aside class="col-lg-4 sidebar d-flex">
+  <div class="container"><section class="profile surface row">
+  <div class="col-xl-6 d-flex align-items-center justify-content-center">
+    <img class="profile-avatar img-fluid" src="/images/profile.webp" alt="ChallengeHub" loading="lazy">
+  </div>
+  <div class="col-xl-6">
+    <h5 class="profile-name my-2">ChallengeHub</h5><div class="profile-bio mb-2">Knowledge Sharing</div><div class="profile-company mb-2"><i class="fas fa-fw fa-building"></i>ChallengeHub</div><div class="profile-location mb-2"><i class="fas fa-fw fa-map-marker-alt"></i>China</div><div class="profile-about mb-2"><i class="fas fa-fw fa-info-circle"></i><a href="/about/">关于</a></div></div>
+</section><section class="recent-posts row surface">
+  <h4>最近文章</h4>
+  <ul><li><a href="/posts/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C04-graph-ml/">图神经网络(04)-基于Graph的传统机器学习方法</a></li><li><a href="/posts/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/%E5%9F%BA%E4%BA%8Elstm%E7%9A%84%E7%BE%8E%E5%9B%BD%E5%A4%A7%E9%80%89%E7%9A%84%E6%96%B0%E9%97%BB%E7%9C%9F%E5%81%87%E5%88%86%E7%B1%BB/">基于LSTM的美国大选的新闻真假分类【NLP 新年开胃菜】</a></li><li><a href="/posts/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C03-node-embeddings/">图神经网络（03）-Node Embeddings</a></li><li><a href="/posts/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/scikit-learn/">Scikit-Learn</a></li><li><a href="/posts/%E6%AF%94%E8%B5%9B%E6%8E%A8%E9%80%81/kaggle%E9%A1%B6%E7%BA%A7%E8%B5%9B%E4%BA%8B%E7%AD%89%E4%BD%A0%E6%9D%A5%E6%8E%92%E4%BD%8D/">【比赛推送】KDD 2021/ Kaggle 顶级赛事等你来排位</a></li></ul>
+</section>
+<section class="taxonomy-categories row surface">
+  <h4>
+    <a href="/categories">分类</a>
+  </h4>
+  <div><a href="/categories/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="技术博客">
+      技术博客 <span class="badge rounded-pill">4</span>
+    </a><a href="/categories/challengehub/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="ChallengeHub">
+      ChallengeHub <span class="badge rounded-pill">1</span>
+    </a><a href="/categories/%E6%8B%9B%E8%81%98%E4%BF%A1%E6%81%AF/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="招聘信息">
+      招聘信息 <span class="badge rounded-pill">1</span>
+    </a><a href="/categories/%E6%AF%94%E8%B5%9B%E6%8E%A8%E9%80%81/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="比赛推送">
+      比赛推送 <span class="badge rounded-pill">1</span>
+    </a></div>
+</section><section class="taxonomy-series row surface">
+  <h4>
+    <a href="/series">专栏</a>
+  </h4>
+  <div><a href="/series/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="图神经网络">
+      图神经网络 <span class="badge rounded-pill">2</span>
+    </a><a href="/series/scikit-learn%E7%B3%BB%E5%88%97%E6%95%99%E7%A8%8B/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="Scikit-Learn系列教程">
+      Scikit-Learn系列教程 <span class="badge rounded-pill">1</span>
+    </a><a href="/series/%E6%8B%9B%E8%81%98%E4%BF%A1%E6%81%AF/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="招聘信息">
+      招聘信息 <span class="badge rounded-pill">1</span>
+    </a><a href="/series/%E6%AF%94%E8%B5%9B%E6%8E%A8%E9%80%81/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="比赛推送">
+      比赛推送 <span class="badge rounded-pill">1</span>
+    </a><a href="/series/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AF%BE%E7%A8%8B/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="深度学习课程">
+      深度学习课程 <span class="badge rounded-pill">1</span>
+    </a></div>
+</section><section class="taxonomy-tags row surface">
+  <h4>
+    <a href="/tags">标签</a>
+  </h4>
+  <div><a href="/tags/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="图神经网络">
+      图神经网络 <span class="badge rounded-pill">2</span>
+    </a><a href="/tags/challengehub/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="ChallengeHub">
+      ChallengeHub <span class="badge rounded-pill">1</span>
+    </a><a href="/tags/scikit-learn/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="scikit-learn">
+      scikit-learn <span class="badge rounded-pill">1</span>
+    </a><a href="/tags/%E6%8B%9B%E8%81%98%E4%BF%A1%E6%81%AF/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="招聘信息">
+      招聘信息 <span class="badge rounded-pill">1</span>
+    </a><a href="/tags/%E6%AF%94%E8%B5%9B%E6%8E%A8%E9%80%81/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="比赛推送">
+      比赛推送 <span class="badge rounded-pill">1</span>
+    </a><a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AF%BE%E7%A8%8B/" class="post-taxonomy rounded-pill btn btn-sm me-2 mb-2" title="深度学习课程">
+      深度学习课程 <span class="badge rounded-pill">1</span>
+    </a></div>
+</section></div>
+</aside>
+</div>
+    </main><footer class="footer mt-auto py-3 text-center container"><nav class="social-links nav my-2 justify-content-center"><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://bitbucket.org/bitbucketworkspaceid" title="Bitbucket">
+        <i class="fab fa-fw fa-2x fa-bitbucket"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://hub.docker.com/u/dockerhubusername" title="Dockerhub">
+        <i class="fab fa-fw fa-2x fa-docker"></i>
+      </a>
+    </li><li class="nav-item">
+    <a class="nav-link social-link" href="mailto:challengehub@126.com" title="Email">
+      <i class="fas fa-fw fa-2x fa-envelope"></i>
+    </a>
+  </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://facebook.com/facebookusername" title="Facebook">
+        <i class="fab fa-fw fa-2x fa-facebook"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://github.com/China-ChallengeHub" title="Github">
+        <i class="fab fa-fw fa-2x fa-github"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://gitlab.com/gitlabusername" title="Gitlab">
+        <i class="fab fa-fw fa-2x fa-gitlab"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://www.instagram.com/instagramusername" title="Instagram">
+        <i class="fab fa-fw fa-2x fa-instagram"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://linkedin.com/linkedinusername" title="Linkedin">
+        <i class="fab fa-fw fa-2x fa-linkedin"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=qqnumber&amp;site=qq&amp;menu=yes" title="Qq">
+        <i class="fab fa-fw fa-2x fa-qq"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://www.quora.com/profile/quorausername" title="Quora">
+        <i class="fab fa-fw fa-2x fa-quora"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://www.reddit.com/user/redditusername" title="Reddit">
+        <i class="fab fa-fw fa-2x fa-reddit"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://stackoverflow.com/users/stackoverflowuserid" title="Stackoverflow">
+        <i class="fab fa-fw fa-2x fa-stack-overflow"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://t.me/telegramusername" title="Telegram">
+        <i class="fab fa-fw fa-2x fa-telegram"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://tumblrusername.tumblr.com" title="Tumblr">
+        <i class="fab fa-fw fa-2x fa-tumblr"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://twitter.com/twitterusername" title="Twitter">
+        <i class="fab fa-fw fa-2x fa-twitter"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://weibo.com/weibousername" title="Weibo">
+        <i class="fab fa-fw fa-2x fa-weibo"></i>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link social-link" target="_blank" href="https://www.zhihu.com/people/zhihuusername" title="Zhihu">
+        <i class="fab fa-fw fa-2x fa-zhihu"></i>
+      </a>
+    </li></nav>
+<div class="copyright mb-2">
+  Copyright © 2020-2021 ChallengeHub. All Rights Reserved.
+</div>
+</footer>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0-rc.1/contrib/auto-render.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "$", right: "$", display: false}
+              ]
+          });
+    });
+</script><a id="btnScrollToTop" class="btn-scroll-to-top">
+  <i class="fas fa-fw fa-chevron-circle-up fa-2x"></i>
+</a>
+</body>
+</html>
