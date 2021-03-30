@@ -1,5 +1,6 @@
 ﻿+++
 title = "基于LSTM的美国大选的新闻真假分类【NLP 新年开胃菜】"
+author = 'asir'
 date = "2021-03-29"
 publishDate = "2021-03-29"
 description = "基于LSTM的美国大选的新闻真假分类【NLP 新年开胃菜】"
