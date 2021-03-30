@@ -1,6 +1,7 @@
 +++
 title = "图神经网络（03）-Node Embeddings"
 date = "2021-03-28"
+author = "致Great"
 description = "关于 Alert Shortcode 的详细描述"
 featured = false
 categories = [
