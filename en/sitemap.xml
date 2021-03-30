@@ -2,6 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>/en/author/</loc>
+    <lastmod>2020-11-09T00:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-tw"
+                href="/zh-tw/author/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/author/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/author/"
+                />
+  </url><url>
     <loc>/en/</loc>
     <lastmod>2020-11-09T00:00:00+00:00</lastmod>
     <xhtml:link
@@ -24,6 +42,9 @@
     <lastmod>2020-11-09T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/en/tags/html/</loc>
+    <lastmod>2020-11-09T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/en/author/hugo-authors/</loc>
     <lastmod>2020-11-09T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/en/tags/markdown/</loc>

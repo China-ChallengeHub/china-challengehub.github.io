@@ -315,6 +315,23 @@
                 href="/zh-tw/posts/shortcodes/tencentvideo/"
                 />
   </url><url>
+    <loc>/zh-tw/author/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/author/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/author/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-tw"
+                href="/zh-tw/author/"
+                />
+  </url><url>
     <loc>/zh-tw/search/</loc>
     <xhtml:link
                 rel="alternate"
